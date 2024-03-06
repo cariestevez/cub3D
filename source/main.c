@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/05 18:30:10 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/06 13:58:45 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,24 @@
 void	free_gnl_buff(int fd, char *line)
 {
 	line = get_next_line(fd);
-	while (line)
+	while (line != NULL)
 	{
 		free(line);
 		line = get_next_line(fd);
 	}
-	return ;
+}
+
+void	free_array(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		free(arr[i]);
+		arr[i] == NULL;
+		i++
+	}
 }
 
 t_map	*init_game(void)
@@ -40,8 +52,8 @@ t_map	*init_game(void)
 
 void	init_game_2(t_map *game)
 {
-	game->ceiling = 0;
-	game->ground = 0;
+	game->ceiling = NULL;
+	game->ground = NULL;
 	game->txtr_wall_N = NULL;
     game->txtr_wall_S = NULL;
     game->txtr_wall_E = NULL;
@@ -74,26 +86,63 @@ int	check_args(int argc, char **argv)
 	return (0);
 }
 
-int	pre_parsing_check(int fd, t_map *game)
+int	save_rgb(t_map *game, char **token)//add check for correct RGB?
+{
+	if (ft_strncmp(token[0], "F", 2) == 0)
+		game->floor = ft_strdup(token[1]);
+	else if (ft_strncmp(token[0], "C", 2) == 0)
+		game->ceiling = ft_strdup(token[1]);
+	return (0);
+}
+
+int	save_textures(char *line, t_map *game)
+{
+	int	i;
+	char **token;
+
+	i = 0;
+	token = ft_split(line, ' ');
+	if (!token)
+		return (1);
+	while (token[i])
+		i++;
+	if (i != 2)
+		return (1);
+	if (ft_strncmp(token[0], "NO", 3) == 0)
+		game->txtr_wall_N = ft_strdup(token[1]);
+	else if (ft_strncmp(token[0], "SO", 3) == 0)
+		game->txtr_wall_S = ft_strdup(token[1]);
+	else if (ft_strncmp(token[0], "EA", 3) == 0)
+		game->txtr_wall_E = ft_strdup(token[1]);
+	else if (ft_strncmp(token[0], "WE", 3) == 0)
+		game->txtr_wall_W = ft_strdup(token[1]);
+	else if ((ft_strncmp(token[0], "F", 2) == 0
+		|| ft_strncmp(token[0], "C", 2) == 0) && save_rgb(game, token))
+		return (free_array(token), 1);
+	else
+		return (free_array(token), 1);
+	return (free_array(token), 0);
+}
+
+int	parse_textures(int fd, t_map *game)
 {
 	int		ret;
 	char	*line;
 
 	ret = 0;
+	line = NULL;
 	while (!game->ceiling || !game->ground || !game->txtr_wall_N ||
 		!game->txtr_wall_S || !game->txtr_wall_E || !game->txtr_wall_W)
 	{
 		ret = get_next_line(fd, &line);
-		if (ret == -1)//map is empty(read until the end with gnl??!)
+		if (ret == -1)//map is empty(read until the end with gnl??!)entering only in 1st round?
 			return (printf("Error\nMap is empty!\n"), 1);
-		// if (ret == 0)//EOF reached
-		// 	break ;
 		if (ft_strlen(line) == 0)//empty line->gnl
 			;
-		else if (!save_data(line))//incorrect data in map(not saved)
-			return (free_gnl_buff(line), 1);
+		else if (ret == 0 || save_textures(line, game))//EOF reached(means no map on it!) or incorrect data in file(=>not saved)
+			return (printf("Error\nInvalid file format\n"), free_gnl_buff(line), 1);
+		free(line);
 	}
-	free_gnl_buff(line);
 	return (0);
 	
 	// if (ret == 0)
@@ -114,14 +163,32 @@ int	pre_parsing_check(int fd, t_map *game)
 	// return (0);
 }
 
-int check_map_format(char *map)
+//when we enter here there should just be empty lines or the map chars in the rest of the file from here
+int	parse_map(int fd, t_map *game)
+{
+	int		ret;
+	char	*line;
+
+	line = NULL;
+	while (1)
+	{
+		ret = get_next_line(fd, &line);
+		if (ft_strlen(line) == 0)//empty line->gnl
+			;
+		if (invalid_char(line))
+			return (printf("Error\nInvalid map\n"). 1);
+	}
+	return (0);
+}
+
+int check_file(char *map_file, t_map *game)
 {
     int	fd;
 
-	fd = open(map, O_RDONLY);
+	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 		return (printf("Error\nUnable to open the map file\n"), 1);
-	if (pre_parsing_check(fd))
+	if (parse_textures(fd, game) || parse_map(fd, game))
 		return (close(fd), 1);
     return (close(fd), 0);
 }
@@ -134,7 +201,7 @@ int	main(int argc, char **argv)
 	if (!game)
 		return (EXIT_FAILURE);
 	if (check_args(argc, argv)
-        || check_map(argv[1], game))
+        || check_file(argv[1], game))
 		return (EXIT_FAILURE);
 	/*if (parse_and_validate(game, argv) == 1)
 		return (EXIT_FAILURE);
