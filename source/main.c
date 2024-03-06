@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/06 13:58:45 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:09:50 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	init_game_2(t_map *game)
 	return ;
 }
 
-int	check_args(int argc, char **argv)
+int	args_check(int argc, char **argv)
 {
 	size_t	len;
 
@@ -104,7 +104,7 @@ int	save_textures(char *line, t_map *game)
 	token = ft_split(line, ' ');
 	if (!token)
 		return (1);
-	while (token[i])
+	while (token[i])//get array length
 		i++;
 	if (i != 2)
 		return (1);
@@ -140,27 +140,75 @@ int	parse_textures(int fd, t_map *game)
 		if (ft_strlen(line) == 0)//empty line->gnl
 			;
 		else if (ret == 0 || save_textures(line, game))//EOF reached(means no map on it!) or incorrect data in file(=>not saved)
-			return (printf("Error\nInvalid file format\n"), free_gnl_buff(line), 1);
+			return (printf("Error\nInvalid file format\n"), free_gnl_buff(line) 1);
 		free(line);
 	}
 	return (0);
+}
+
+int	is_closed(t_map *game)
+{
 	
-	// if (ret == 0)
-	// while (ret != 0)
-	// {
-    //     while (line == ' ')//skip empty lines at beginning
-    //     {
-    //         free(line);
-	// 	    line = get_next_line(fd);
-    //     }
-    //     if ()
-	// 	// if (invalid_char_in_map(line))
-	// 	// 	return (free_gnl_buff(fd, line), 1);
-	// 	free(line);
-	// 	line = get_next_line(fd);
-	// }
-	// free(line);
-	// return (0);
+}
+
+//only 1, 0, N, S, E, W and space chars
+//there must be 1 position coord(N, S, E, W)
+	//there can just be 1 of them
+//at least 3x3
+//enclosed in walls (1's)
+//no spaces inside of the walls (1's)
+int	validate_map(t_map *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (game->matrix[i] != NULL)
+	{
+		while (game->matrix[i][j] != '\0')
+		{
+			if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0' || game->matrix[i][j] == 'N'
+				|| game->matrix[i][j] == 'S' || game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W'
+				|| game->matrix[i][j] == ' '))
+				return (printf"Error\nInvalid character in map\n"), 1;
+			j++;
+		}
+		i++;
+	}
+	if (i < 2 || j < 2)
+		return (printf("Error\nMap too small\n"), 1);
+	if (is_closed(game))
+		return (printf("Error\nMap not enclosed in walls\n"), 1);
+	return (0);
+}
+
+//num of rows unknown, increasing each time we enter this function = i (y coord) --> to be reallocated
+//num of columns = length of map line = j (x coord)
+//realloc
+int	save_map_matrix[i](char *matrix[i], t_map *game)
+{
+	int	i;
+	char **new_matrix;
+
+	i = 0;
+	new_matrix = NULL;
+	while (game->matrix[i])//get array length
+		i++;
+	new_matrix = (char **)malloc(sizeof(char *) * (i + 1));
+	if (!new_matrix)
+		return (1);
+	i = 0;
+	while (game->matrix[i])
+	{
+		new_matrix[i] =	game->matrix[i];
+		free(game->matrix[i]);
+		game->matrix[i] = NULL;
+		i++;
+	}
+	free(game->matrix);
+	new_matrix[i] = ft_strdup(line);
+	game->matrix = new_matrix;
 }
 
 //when we enter here there should just be empty lines or the map chars in the rest of the file from here
@@ -173,15 +221,25 @@ int	parse_map(int fd, t_map *game)
 	while (1)
 	{
 		ret = get_next_line(fd, &line);
-		if (ft_strlen(line) == 0)//empty line->gnl
+		if (ft_strlen(line) == 0 && game->matrix == NULL)//empty line->gnl
 			;
-		if (invalid_char(line))
-			return (printf("Error\nInvalid map\n"). 1);
+		else if ((ret == 0 && game->matrix == NULL)
+			|| (ft_strlen(line) == 0 && game->matrix != NULL)
+			|| save_map_line(line, game))//EOF(=no map) or empty line in middle of map or error saving map
+		{
+			free_gnl_buff(line);
+			return (printf("Error\nInvalid map format\n"), 1);
+		}
+		free(line);
+		if (ret == 0)//EOF(nothing in buff to free)
+			break ;
 	}
+	if (validate_map(game))
+		return (1);
 	return (0);
 }
 
-int check_file(char *map_file, t_map *game)
+int parsing(char *map_file, t_map *game)
 {
     int	fd;
 
@@ -200,9 +258,9 @@ int	main(int argc, char **argv)
 	game = init_game();;
 	if (!game)
 		return (EXIT_FAILURE);
-	if (check_args(argc, argv)
-        || check_file(argv[1], game))
-		return (EXIT_FAILURE);
+	if (args_check(argc, argv)
+        || parsing(argv[1], game))
+		return (free_struct(game), EXIT_FAILURE);
 	/*if (parse_and_validate(game, argv) == 1)
 		return (EXIT_FAILURE);
 	game->mlx = mlx_init(32 * game->width, 32 * game->height, "xoxo", true);
@@ -212,5 +270,5 @@ int	main(int argc, char **argv)
 	display_images(game);
 	mlx_key_hook(game->mlx, &my_keyhook, game);
 	mlx_loop(game->mlx);*/
-	return (free_success_exit(game));
+	return (free_struct(game), EXIT_SUCCESS);
 }
