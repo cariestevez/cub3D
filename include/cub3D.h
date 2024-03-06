@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/05 18:21:21 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/06 13:20:48 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ typedef struct s_map
 	//size_t			moves;
 	char			**matrix;
 	mlx_t			*mlx;
-	int				ceiling;
-	int				ground;
+	char			*ceiling;
+	char			*ground;
 	mlx_texture_t	*txtr_wall_N;
 	mlx_texture_t	*txtr_wall_S;
 	mlx_texture_t	*txtr_wall_E;
@@ -71,10 +71,13 @@ typedef struct s_map
 
 //main.c
 int		check_args(int argc, char **argv);
-int		check_map(char *map);
+int		check_file(char *map);
+
 t_map	*init_game(void);
 void	init_game_2(t_map *game);
 
+int	parse_textures(int fd, t_map *game);
+int		save_textures(char *line, t_map *game);
 
 // int		parse_and_validate(t_map *game, char **argv);
 // void	ft_mlxerror(t_map *game);
