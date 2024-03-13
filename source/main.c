@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/06 17:09:50 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/12 17:14:16 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,30 @@ void	free_array(char **arr)
 	while (arr[i] != NULL)
 	{
 		free(arr[i]);
-		arr[i] == NULL;
-		i++
+		arr[i] = NULL;
+		i++;
 	}
+}
+
+int	free_struct(t_map *game)
+{
+	free(game->ceiling);
+	free(game->ground);
+	free(game->path_wall_N);
+	free(game->path_wall_S);
+	free(game->path_wall_E);
+	free(game->path_wall_W);
+	free(game->txtr_wall_N);
+	free(game->txtr_wall_S);
+	free(game->txtr_wall_E);
+	free(game->txtr_wall_W);
+	free(game->img_wall_N);
+	free(game->img_wall_S);
+	free(game->img_wall_E);
+	free(game->img_wall_W);
+	free_array(game->matrix);
+	free(game->mlx);
+	return (0);
 }
 
 t_map	*init_game(void)
@@ -45,7 +66,7 @@ t_map	*init_game(void)
 	game->start_y = 0;
 	game->start_x = 0;
 	game->matrix = NULL;
-    game->mlx = NULL;
+	game->mlx = NULL;
 	init_game_2(game);
 	return (game);
 }
@@ -54,15 +75,21 @@ void	init_game_2(t_map *game)
 {
 	game->ceiling = NULL;
 	game->ground = NULL;
+
+	game->path_wall_N = NULL;
+	game->path_wall_S = NULL;
+	game->path_wall_E = NULL;
+	game->path_wall_W = NULL;
+	
 	game->txtr_wall_N = NULL;
-    game->txtr_wall_S = NULL;
-    game->txtr_wall_E = NULL;
-    game->txtr_wall_W = NULL;
+	game->txtr_wall_S = NULL;
+	game->txtr_wall_E = NULL;
+	game->txtr_wall_W = NULL;
 
 	game->img_wall_N = NULL;
-    game->img_wall_S = NULL;
-    game->img_wall_E = NULL;
-    game->img_wall_W = NULL;
+	game->img_wall_S = NULL;
+	game->img_wall_E = NULL;
+	game->img_wall_W = NULL;
 
 	return ;
 }
@@ -89,7 +116,7 @@ int	args_check(int argc, char **argv)
 int	save_rgb(t_map *game, char **token)//add check for correct RGB?
 {
 	if (ft_strncmp(token[0], "F", 2) == 0)
-		game->floor = ft_strdup(token[1]);
+		game->ground = ft_strdup(token[1]);
 	else if (ft_strncmp(token[0], "C", 2) == 0)
 		game->ceiling = ft_strdup(token[1]);
 	return (0);
@@ -109,13 +136,13 @@ int	save_textures(char *line, t_map *game)
 	if (i != 2)
 		return (1);
 	if (ft_strncmp(token[0], "NO", 3) == 0)
-		game->txtr_wall_N = ft_strdup(token[1]);
+		game->path_wall_N = ft_strdup(token[1]);
 	else if (ft_strncmp(token[0], "SO", 3) == 0)
-		game->txtr_wall_S = ft_strdup(token[1]);
+		game->path_wall_S = ft_strdup(token[1]);
 	else if (ft_strncmp(token[0], "EA", 3) == 0)
-		game->txtr_wall_E = ft_strdup(token[1]);
+		game->path_wall_E = ft_strdup(token[1]);
 	else if (ft_strncmp(token[0], "WE", 3) == 0)
-		game->txtr_wall_W = ft_strdup(token[1]);
+		game->path_wall_W = ft_strdup(token[1]);
 	else if ((ft_strncmp(token[0], "F", 2) == 0
 		|| ft_strncmp(token[0], "C", 2) == 0) && save_rgb(game, token))
 		return (free_array(token), 1);
@@ -140,16 +167,16 @@ int	parse_textures(int fd, t_map *game)
 		if (ft_strlen(line) == 0)//empty line->gnl
 			;
 		else if (ret == 0 || save_textures(line, game))//EOF reached(means no map on it!) or incorrect data in file(=>not saved)
-			return (printf("Error\nInvalid file format\n"), free_gnl_buff(line) 1);
+			return (printf("Error\nInvalid file format\n"), free_gnl_buff(fd, line), 1);
 		free(line);
 	}
 	return (0);
 }
 
-int	is_closed(t_map *game)
-{
+// int	is_closed(t_map *game)
+// {
 	
-}
+// }
 
 //only 1, 0, N, S, E, W and space chars
 //there must be 1 position coord(N, S, E, W)
@@ -171,22 +198,22 @@ int	validate_map(t_map *game)
 			if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0' || game->matrix[i][j] == 'N'
 				|| game->matrix[i][j] == 'S' || game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W'
 				|| game->matrix[i][j] == ' '))
-				return (printf"Error\nInvalid character in map\n"), 1;
+				return (printf("Error\nInvalid character in map\n"), 1);
 			j++;
 		}
 		i++;
 	}
 	if (i < 2 || j < 2)
 		return (printf("Error\nMap too small\n"), 1);
-	if (is_closed(game))
-		return (printf("Error\nMap not enclosed in walls\n"), 1);
+	// if (is_closed(game))
+	// 	return (printf("Error\nMap not enclosed in walls\n"), 1);
 	return (0);
 }
 
 //num of rows unknown, increasing each time we enter this function = i (y coord) --> to be reallocated
 //num of columns = length of map line = j (x coord)
 //realloc
-int	save_map_matrix[i](char *matrix[i], t_map *game)
+int	save_map_line(char *line, t_map *game)
 {
 	int	i;
 	char **new_matrix;
@@ -201,7 +228,7 @@ int	save_map_matrix[i](char *matrix[i], t_map *game)
 	i = 0;
 	while (game->matrix[i])
 	{
-		new_matrix[i] =	game->matrix[i];
+		new_matrix[i] =	ft_strdup(game->matrix[i]);
 		free(game->matrix[i]);
 		game->matrix[i] = NULL;
 		i++;
@@ -209,9 +236,11 @@ int	save_map_matrix[i](char *matrix[i], t_map *game)
 	free(game->matrix);
 	new_matrix[i] = ft_strdup(line);
 	game->matrix = new_matrix;
+	free(new_matrix);
+	return (0);
 }
 
-//when we enter here there should just be empty lines or the map chars in the rest of the file from here
+//when we enter, from here there should just be empty lines or the map chars
 int	parse_map(int fd, t_map *game)
 {
 	int		ret;
@@ -227,7 +256,7 @@ int	parse_map(int fd, t_map *game)
 			|| (ft_strlen(line) == 0 && game->matrix != NULL)
 			|| save_map_line(line, game))//EOF(=no map) or empty line in middle of map or error saving map
 		{
-			free_gnl_buff(line);
+			free_gnl_buff(fd, line);
 			return (printf("Error\nInvalid map format\n"), 1);
 		}
 		free(line);
@@ -241,14 +270,14 @@ int	parse_map(int fd, t_map *game)
 
 int parsing(char *map_file, t_map *game)
 {
-    int	fd;
+	int	fd;
 
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 		return (printf("Error\nUnable to open the map file\n"), 1);
 	if (parse_textures(fd, game) || parse_map(fd, game))
 		return (close(fd), 1);
-    return (close(fd), 0);
+	return (close(fd), 0);
 }
 
 int	main(int argc, char **argv)
@@ -259,7 +288,7 @@ int	main(int argc, char **argv)
 	if (!game)
 		return (EXIT_FAILURE);
 	if (args_check(argc, argv)
-        || parsing(argv[1], game))
+		|| parsing(argv[1], game))
 		return (free_struct(game), EXIT_FAILURE);
 	/*if (parse_and_validate(game, argv) == 1)
 		return (EXIT_FAILURE);
