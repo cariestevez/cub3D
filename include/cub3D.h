@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/06 13:20:48 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/12 17:05:07 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,18 @@ typedef struct s_map
 	mlx_t			*mlx;
 	char			*ceiling;
 	char			*ground;
+	char			*path_wall_N;
+	char			*path_wall_S;
+	char			*path_wall_E;
+	char			*path_wall_W;
 	mlx_texture_t	*txtr_wall_N;
 	mlx_texture_t	*txtr_wall_S;
 	mlx_texture_t	*txtr_wall_E;
 	mlx_texture_t	*txtr_wall_W;
-	// mlx_texture_t	*txtr_exit;
-	// mlx_texture_t	*txtr_win;
-	// mlx_texture_t	*txtr_item;
-	// mlx_texture_t	*txtr_plyr;
-	//mlx_image_t		*img_ground;
 	mlx_image_t		*img_wall_N;
 	mlx_image_t		*img_wall_S;
 	mlx_image_t		*img_wall_E;
 	mlx_image_t		*img_wall_W;
-	// mlx_image_t		*img_exit;
-	// mlx_image_t		*img_win;
-	// mlx_image_t		*img_item;
-	// mlx_image_t		*img_plyr;
-	// mlx_image_t		*score_collect;
-	// mlx_image_t		*score_moves;
 }	t_map;
 
 //main.c
