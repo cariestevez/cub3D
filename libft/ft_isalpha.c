@@ -3,27 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/29 19:35:51 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/17 20:13:01 by cestevez         ###   ########.fr       */
+/*   Created: 2022/11/29 18:45:09 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/15 20:17:24 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include <stdio.h>*/
 #include "libft.h"
-/*#include <unistd.h>*/
 
 int	ft_isalpha(int c)
 {
-	if ((c > 64 && c < 91) || (c > 96 && c < 123))
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
 		return (1);
-	else
-		return (0);
+	return (0);
 }
-/*int	main(int argc, char **argv)
+/*int	main(void)
 {
-	if (argc > 1)
-		ft_isalpha(argv[1][0]);
-	else
-		return(0);
-}*/
+	printf("%d\n", ft_isalpha('a'));
+	printf("%d\n", ft_isalpha('3'));
+	printf("%d\n", ft_isalpha('.'));
+}
+*/

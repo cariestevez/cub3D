@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   toupper_printf.c                                   :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/24 23:11:48 by cestevez          #+#    #+#             */
-/*   Updated: 2023/07/03 17:16:07 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/12 20:32:18 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/22 14:15:55 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*toupper_printf(char *s)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	int	i;
+	t_list	*tmp;
 
-	i = 0;
-	while (s[i] != 0)
+	while (*lst)
 	{
-		if (s[i] > 96 && s[i] < 123)
-			s[i] -= 32;
-		i++;
+		tmp = (*lst)->next;
+		ft_lstdelone((*lst), (*del));
+		(*lst) = tmp;
 	}
-	return (s);
 }

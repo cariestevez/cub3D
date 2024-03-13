@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_char.c                                       :+:      :+:    :+:   */
+/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/24 23:10:30 by cestevez          #+#    #+#             */
-/*   Updated: 2023/07/03 17:15:31 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/12 21:20:22 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/22 14:15:31 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	print_char(char c)
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	int	len;
-
-	len = write (1, &c, 1);
-	return (len);
+	while (lst)
+	{
+		(*f)(lst->content);
+		lst = lst->next;
+	}
 }

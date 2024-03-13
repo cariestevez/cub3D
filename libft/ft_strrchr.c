@@ -3,49 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 17:19:22 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/18 01:18:40 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/06 18:35:51 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 17:25:02 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include <stdio.h>
+#include <string.h>*/
 #include "libft.h"
-
-/*#include <string.h>
-#include <stdio.h>*/
-char	*ft_strrchr(const char *s, int c)
+/*
+int	ft_strlen(char *s)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = -1;
-	while (s[i] != '\0')
-	{
-		if (s[i] == (char)c)
-			j = i;
+	while(s[i] != '\0')
 		i++;
+	return(i);
+}*/
+
+char	*ft_strrchr(const char *s, int c)
+{
+	int		len;
+	char	*str;
+
+	str = (char *)s;
+	len = (int)ft_strlen(str);
+	while (len != -1)
+	{
+		if (str[len] == (char)c)
+			return (&str[len]);
+		len--;
 	}
-	if (j >= 0)
-		return ((char *)(s + j));
-	if ((char)c == '\0')
-		return ((char *)(s + i));
 	return (0);
 }
-/*int main()
-{
-	int	findme = '\0';
-	char strtoscan[] = "";
-	int result;
+/*
+int main () {
+   const char str[] = "http://www.tutorialspoint.com";
+   const char ch = '.';
+   char *ret;
 
-	char *found = ft_strrchr(strtoscan, findme);
-	result = found - strtoscan;
-	if (found != 0)
-	{
-		printf("'%c' found at position %d.\n", findme, result + 1); 
-		printf("here: %s\n", found);
-	}
-	else
-		printf("No coincidences");
-}*/
+   ret = ft_strchr(str, ch);
+
+   printf("String after |%c| is - |%s|\n", ch, ret);
+
+   return(0);
+}
+*/

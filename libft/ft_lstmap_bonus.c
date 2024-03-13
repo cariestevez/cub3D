@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/09 13:30:02 by cestevez          #+#    #+#             */
-/*   Updated: 2023/01/09 17:49:42 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/20 18:20:33 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/22 14:15:18 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,17 @@
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
 	t_list	*new_lst;
-	t_list	*new_node;
+	t_list	*new_elem;
 
+	if (!lst)
+		return (NULL);
 	new_lst = 0;
-	if (lst == 0 || f == 0 || del == 0)
-		return (0);
 	while (lst)
 	{
-		new_node = ft_lstnew(f(lst->content));
-		if (new_node == 0)
-		{
-			ft_lstclear(&new_lst, del);
-			return (0);
-		}
+		new_elem = ft_lstnew((*f)(lst->content));
+		ft_lstadd_back(&new_lst, new_elem);
 		lst = lst->next;
-		ft_lstadd_back(&new_lst, new_node);
 	}
+	ft_lstclear(&lst, del);
 	return (new_lst);
 }
-/*line23: create a node for the new lst that is = to the 1st node of
-the given lst after having the given func applied to it
-line25: if the funct returned an empty node, delete it and break??*/

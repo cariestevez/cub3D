@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/09 13:28:10 by cestevez          #+#    #+#             */
-/*   Updated: 2023/01/09 14:28:13 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/12 20:29:52 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/22 14:15:11 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-t_list	*ft_lstlast(t_list *lst)
+/*
+void	del(void *content)
 {
-	if (lst == 0)
-		return (0);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
+	free(content);
+}*/
+
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
+{
+	(*del)(lst->content);
+	free(lst);
 }

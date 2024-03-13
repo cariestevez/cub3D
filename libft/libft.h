@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 18:05:37 by cestevez          #+#    #+#             */
-/*   Updated: 2023/10/16 16:13:35 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/20 18:49:15 by hdorado-          #+#    #+#             */
+/*   Updated: 2023/07/18 22:15:04 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,24 @@
 # define LIBFT_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE  1
 # endif
 
-# ifndef FD_NUMBER
-#  define FD_NUMBER 100
-# endif
-
-# include <unistd.h>
-# include <stdio.h>
 # include <stddef.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <stdarg.h>
-
-typedef struct s_buffer
-{
-	char	buffer[BUFFER_SIZE + 1];
-}				t_buffer;
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <fcntl.h>
 
 typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
-}			t_list;
+}				t_list;
 
+/* libc */
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
@@ -72,6 +66,7 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+//Libft bonus
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_front(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);
@@ -81,25 +76,27 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-
-// ft_printf
-int		ft_printf(const char *format, ...);
-int		print_char(char c);
-int		print_string(char *s, const char c);
-int		print_nbr(int n);
-int		print_unsigned(unsigned int n);
-char	*print_hex(unsigned int num, const char c);
-char	*toupper_printf(char *s);
-char	*print_address(size_t num);
-
-// get_next_line
+//printf
+int		ft_printf(const char *str, ...);
+int		ft_putchar(char c);
+int		ft_putnbr_recursive(unsigned int num);
+int		ft_puthexa_recursive(unsigned long num, char c);
+int		ft_putunint(unsigned int num);
+int		ft_putstr(char *str);
+int		ft_putptr(unsigned long ptr);
+int		ft_puthexa(unsigned int num, char c);
+int		ft_putnbr(int num);
+int		ft_eval_format(va_list *args, char c);
+//get_next_line
 char	*get_next_line(int fd);
-char	*append_str(char *str, char *buffer);
-char	*return_line(char *buffer, char *str, char **tmp);
+char	*ft_append(char *str, char *buffer);
+char	*ft_return_line(char *buffer, char *str, char **tmp);
 char	*read_next_line(char **buffer, char **str, char **tmp, int fd);
-char	*heaths_error(char **str, char **tmp);
+char	*ft_error(char **str, char **tmp);
 void	ft_bzero(void *s, size_t n);
-int		search_newline(char *str);
-void	free_tmp(char **tmp);
+int		ft_search_nl(char *str);
+void	ft_useless_tmp(char **tmp);
+//get_next_line_bonus
+char	*get_next_line_bonus(int fd);
 
 #endif

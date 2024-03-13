@@ -3,38 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/07 19:48:17 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/07 20:15:44 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/06 19:44:03 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 16:56:17 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include <stdio.h>
+#include <string.h>*/
 #include "libft.h"
-/*#include <stdio.h>*/
+
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	size_t		i;
-	const char	*s1;
-	char		*s2;
+	char		*d;
+	const char	*s;
 
-	s1 = src;
-	s2 = dest;
+	d = dest;
+	s = src;
 	i = 0;
-	if (!s1 && !s2)
-		return (0);
+	if (!d && !s)
+		return (NULL);
 	while (i < n)
 	{
-		s2[i] = s1[i];
+		d[i] = s[i];
 		i++;
 	}
-	return (s2);
+	return (d);
 }
-/*int	main()
-{
-	char	str1[] = "hola";
-	char	str2[] = "hey!, como estas?";
-	
-	ft_memcpy(str2, str1, 4);
-	printf("%s", str2);
-}*/
+/*
+
+int main () {
+   char str[50];
+   char dest[50];
+   puts("Without overlapping");
+   strcpy(str,"This is string.h library function");
+   strcpy(dest, "Esto es the destination");
+   puts(str);
+   puts(dest);
+
+   ft_carina_memcpy(dest, str, 7);
+   puts(dest);
+
+   puts("With overlapping");
+   strcpy(str,"This is string.h library function");
+   puts(str);
+
+   ft_carina_memcpy(str+2, str, 7);
+   puts(str);
+   
+   return(0);
+}
+*/

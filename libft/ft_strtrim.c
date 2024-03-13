@@ -3,75 +3,79 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/29 18:20:55 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/29 18:20:57 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/10 15:37:44 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/22 13:35:32 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>*/
+/*#include <stdlib.h>
+#include <stdio.h>*/
 #include "libft.h"
+/*
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+	
+	i = 0;
+	while(s[i] != '\0')
+		i++;
+	return(i);
+}*/
 
-static char			*write_new_str(char *s2, char *s, size_t start, size_t end);
-static unsigned int	search_in_set(const char *set, const char c);
+static size_t	ft_get_i(char const *s1, char const *set)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while (set[j] != '\0')
+	{
+		if (s1[i] == set[j])
+		{
+			j = 0;
+			i++;
+		}
+		else
+			j++;
+	}
+	return (i);
+}
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	start;
-	size_t	end;
-	char	*new_str;
-
-	start = 0;
-	if (!s1)
-		return (0);
-	if (!set)
-		return (ft_strdup(s1));
-	while (s1[start] != '\0' && search_in_set(set, s1[start]) != 0)
-		start++;
-	end = ft_strlen(s1);
-	while (end > start && search_in_set(set, s1[end - 1]) != 0)
-		end--;
-	new_str = (char *)malloc(end - start + 1);
-	if (!new_str)
-		return (0);
-	return (write_new_str(new_str, (char *)s1, start, end));
-}
-
-static char	*write_new_str(char *s2, char *s, size_t start, size_t end)
-{
+	size_t	len;
 	size_t	i;
+	size_t	j;
+	char	*str;
 
-	i = 0;
-	while (start < end)
-		s2[i++] = s[start++];
-	s2[i] = '\0';
-	return (s2);
-}
-
-static unsigned int	search_in_set(const char *set, const char c)
-{
-	size_t	i;
-
-	i = 0;
-	while (set[i])
+	len = ft_strlen((char *)s1);
+	i = ft_get_i(s1, set);
+	j = 0;
+	while (set[j] != '\0' && len != i)
 	{
-		if (set[i] == c)
-			return (1);
-		i++;
+		if (s1[len - 1] == set[j])
+		{
+			j = 0;
+			len--;
+		}
+		else
+			j++;
 	}
-	return (0);
+	str = ft_substr(s1, i, len - i);
+	return (str);
 }
-/*int main()
+/*
+int	main(void)
 {
-	char *str;
-	char *trim_set;
-
-	str = "acrcr";
-	trim_set = "acb";
-	printf("string before trimming: %s\n", str);
-	str = ft_strtrim(str, trim_set);
-	printf("string after trimming: %s\n", str);
+	char	*strtrim;
+	char s1[] = " lorem ipsum dolor sit amet";
+    if (!(strtrim = ft_strtrim(s1, "l ")))
+        puts("NULL");
+    else
+        puts(strtrim);
+    if (strtrim == s1)
+        puts("\nA new string was not returned");
 }*/

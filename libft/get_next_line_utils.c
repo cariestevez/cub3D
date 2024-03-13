@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <hdorado-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 16:52:54 by cestevez          #+#    #+#             */
-/*   Updated: 2023/10/16 16:53:00 by cestevez         ###   ########.fr       */
+/*   Created: 2023/01/17 20:55:04 by hdorado-          #+#    #+#             */
+/*   Updated: 2023/07/11 21:21:17 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*heaths_error(char **str, char **tmp)
+char	*ft_error(char **str, char **tmp)
 {
 	if (*str != NULL)
 		free (*str);
@@ -24,7 +24,7 @@ char	*heaths_error(char **str, char **tmp)
 	return (NULL);
 }
 
-int	search_newline(char *str)
+int	ft_search_nl(char *str)
 {
 	int	i;
 

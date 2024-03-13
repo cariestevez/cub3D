@@ -3,44 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 17:15:16 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/18 01:16:20 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/06 18:23:16 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 17:18:06 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include <stdio.h>
+#include <string.h>*/
 #include "libft.h"
-/*#include <string.h>
-#include <stdio.h>*/
+
 char	*ft_strchr(const char *s, int c)
 {
-	int	i;
+	int		i;
+	char	*str;
 
+	str = (char *)s;
 	i = 0;
-	while (s[i] != '\0')
+	while (i <= (int)ft_strlen(str))
 	{
-		if (s[i] == (char)c)
-			return ((char *)&s[i]);
+		if (str[i] == (char)c)
+			return (&str[i]);
 		i++;
 	}
-	if (s[i] == (char)c)
-		return ((char *)&s[i]);
+	if (c == 0 && str[i] == '\0')
+		return (&str[i]);
 	return (0);
 }
-/*int main()
-{
-	int	findme = '\0';
-	char strtoscan[] = "Encuentra a Oli";
-	int result;
+/*
+int main () {
+   const char str[] = "http://www.tutorialspoint.com";
+   const char ch = '.';
+   char *ret;
 
-	char *found = ft_strchr(strtoscan, findme);
-	result = found - strtoscan;
-	if (found != 0)
-	{
-		printf("'%c' found at position %d.\n", findme, result + 1);
-		printf("here: %s\n", found);
-	}
-	else
-		printf("No coincidences");
+   ret = ft_strchr(str, ch);
+
+   printf("String after |%c| is - |%s|\n", ch, ret);
+   
+   return(0);
 }*/

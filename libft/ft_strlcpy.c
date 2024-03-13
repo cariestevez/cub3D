@@ -3,40 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 17:18:03 by cestevez          #+#    #+#             */
-/*   Updated: 2023/01/09 16:41:35 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/05 20:16:24 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 17:39:31 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
 /*#include <stdio.h>
 #include <string.h>*/
-size_t	ft_strlcpy(char *restrict dst, const char *restrict src, size_t size)
-{
-	size_t	i;
-	size_t	length;
+#include "libft.h"
 
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	counter;
+	size_t	i;
+
+	counter = 0;
+	while (src[counter] != '\0')
+		counter++;
 	i = 0;
-	length = 0;
-	while (src[length] != '\0')
-		length++;
-	if (size < 1)
-		return (length);
-	while (src[i] != '\0' && i < (size - 1))
+	if (size == 0)
+		return (counter);
+	while (src[i] != '\0' && i < size - 1)
 	{
 		dst[i] = src[i];
 		i++;
 	}
 	dst[i] = '\0';
-	return (length);
+	return (counter);
 }
-/*int	main(void)
-{
-	char	dest[25]= "No";
-	char	src[25]= "What the fuck?";
-	
-	printf("Length: %zu, srcstr: %s dest: %s", ft_strlcpy(dest, src, 3), src, dest);
-}*/

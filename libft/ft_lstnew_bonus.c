@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_unsigned.c                                   :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/24 23:11:33 by cestevez          #+#    #+#             */
-/*   Updated: 2023/07/03 17:16:01 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/12 19:17:51 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/22 14:15:45 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include <unistd.h>*/
 #include "libft.h"
 
-int	print_unsigned(unsigned int n)
+t_list	*ft_lstnew(void *content)
 {
-	char	num;
-	int		len;
+	t_list	*lst;
 
-	len = 0;
-	if (n >= 10)
-		len += print_unsigned(n / 10);
-	num = (n % 10) + 48;
-	len += write(1, &num, 1);
-	return (len);
+	lst = malloc(sizeof(t_list));
+	if (!lst)
+		return (NULL);
+	lst->next = NULL;
+	lst->content = content;
+	return (lst);
 }

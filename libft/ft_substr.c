@@ -3,50 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 17:20:03 by cestevez          #+#    #+#             */
-/*   Updated: 2023/01/03 19:34:24 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/10 15:02:37 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/22 13:48:07 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 /*#include <stdlib.h>
-#include <unistd.h>
 #include <stdio.h>*/
+#include "libft.h"
+
+static char	*ft_substr_calloc(size_t size)
+{
+	char	*str;
+
+	str = ft_calloc(sizeof(char), size + 1);
+	if (!str)
+		return (NULL);
+	return (str);
+}
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*ptr;
-	size_t	i;
+	char	*str;
+	size_t	size;
 
-	i = 0;
-	if (!s)
-		return (0);
-	if (ft_strlen(s) < start)
+	if (start >= ft_strlen(s))
+		str = ft_substr_calloc(0);
+	else
 	{
-		ptr = (char *)malloc(sizeof(char));
-		if (!ptr)
-			return (0);
-		*ptr = '\0';
-		return (ptr);
+		if (len > ft_strlen(s) - start)
+			size = ft_strlen(s) - start;
+		else
+			size = len;
+		str = ft_substr_calloc(size);
 	}
-	if (start + len > ft_strlen(s))
-		len = ft_strlen(s) - start;
-	ptr = (char *)malloc(len + 1);
-	if (!ptr)
-		return (0);
-	while (s[start] != 0 && i < len)
-		ptr[i++] = s[start++];
-	ptr[i] = '\0';
-	return (ptr);
+	if (!str)
+		return (NULL);
+	if (start >= ft_strlen(s))
+		return (str);
+	ft_strlcpy(str, s + start, size + 1);
+	return (str);
 }
-/*int		main(void)
+/*
+int	main(void)
 {
-	char	str[] = "lorem ipsum dolor sit amet";
-	char    *new_str;
-	
-	new_str = ft_substr(str, 7, 10);
-	printf("%s\n", new_str);
-	return (0);
+	char	*stri;
+
+	stri = ft_substr("Hello world!", 6, 6);
+	puts(stri);
 }*/

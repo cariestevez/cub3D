@@ -3,26 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/02 18:17:25 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/17 20:27:44 by cestevez         ###   ########.fr       */
+/*   Created: 2022/11/29 19:47:38 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/15 20:18:17 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-/*#include <unistd.h>*/
+
 int	ft_isprint(int c)
 {
-	if (c >= 32 && c < 127)
+	if (c >= 32 && c <= 126)
 		return (1);
-	else
-		return (0);
+	return (0);
 }
-/*int	main(int argc, char **argv)
-{
-	if (argc > 1)
-		ft_isascii(argv[1][0]);
-	else
-		return(0);
-}*/
