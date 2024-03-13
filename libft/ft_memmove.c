@@ -3,57 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/08 12:46:10 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/09 20:27:45 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/06 19:44:03 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 17:00:37 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 /*#include <stdio.h>
 #include <string.h>*/
+#include "libft.h"
+
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
 	size_t		i;
+	char		*d;
+	const char	*s;
 
-	if ((char *)dest < (const char *)src)
+	d = dest;
+	s = src;
+	if (s > d)
 	{
 		i = 0;
 		while (i < n)
 		{
-			((char *)dest)[i] = ((const char *)src)[i];
+			d[i] = s[i];
 			i++;
 		}
 	}
-	else if ((char *)dest > (const char *)src && n > 0)
+	else if (s < d)
 	{
 		i = n;
-		while (i > 0)
+		while (i != 0)
 		{
-			((char *)dest)[i - 1] = ((const char *)src)[i - 1];
+			d[i -1] = s[i -1];
 			i--;
 		}
 	}
-	return (dest);
+	return (d);
 }
-/*int	main()
-{
-	char	strsrc[50] = "abcdefghijklmnopqrst";
-	char	strdest[50] = "hey!, como estas?";
-	
-//segmentation fault w. my funct with this ex.if array size not given
-	strcpy(strdest,"hey!, como estas?");
-	strcpy(strsrc, "abcdefghijklmnopqrst");
-	ft_memmove(strdest-4, strsrc, 18);
-	puts(strdest);
-	puts("\n");
-	puts(strsrc);	
-	puts("\n");
-	strcpy(strdest,"hey!, como estas?");
-	strcpy(strsrc, "abcdefghijklmnopqrst");
-	memmove(strdest-4, strsrc, 18);
-	puts(strdest);
-	puts("\n");
-	puts(strsrc);
+/*
+int main () {
+   char str[50];
+   char dest[50];
+   puts("Without overlapping");
+   strcpy(str,"This is string.h library function");
+   strcpy(dest, "Esto es the destination");
+   puts(str);
+   puts(dest);
+
+   ft_carina_memmove(dest, str, 7);
+   puts(dest);
+
+   puts("With overlapping src < dest");
+   strcpy(str,"This is string.h library function");
+   puts(str);
+
+   ft_carina_memmove(str+2, str, 7);
+   puts(str);
+   
+   puts("With overlapping dest < src");
+   strcpy(str,"This is string.h library function");
+   puts(str);
+
+   ft_carina_memmove(str, str + 2, 7);
+   puts(str);
+
+   return(0);
 }*/

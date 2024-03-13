@@ -3,47 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 17:17:29 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/17 22:23:33 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/05 20:28:59 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 17:01:28 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
 /*#include <stdio.h>
 #include <string.h>*/
+#include "libft.h"
+/*
+size_t	ft_strlen(char	*str)
+{
+	size_t	i;
+
+	i = 0;
+	while(str[i] != '\0')
+		i++;
+	return(i);
+}*/
+
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	size_t	length;
 	size_t	i;
-	size_t	dstlen;
+	size_t	j;
 
-	length = 0;
-	i = 0;
-	while (dst[length] != '\0')
-		length++;
-	dstlen = length;
-	while (size > (length + 1) && src[i] != '\0')
+	i = ft_strlen(dst);
+	j = 0;
+	if (size <= i)
+		return (size + ft_strlen(src));
+	while (src[j] != '\0' && size > (j + i + 1))
 	{
-		dst[length] = src[i];
-		length++;
-		i++;
+		dst[i + j] = src[j];
+		j++;
 	}
-	dst[length] = '\0';
-	while (src[i] != '\0')
-		i++;
-	if (size < dstlen)
-		return (i + size);
-	return (dstlen + i);
+	dst[i + j] = 0;
+	return (ft_strlen(src)+ i);
 }
-/*int	main(void)
-{
-	char	dest[25]= "None";
-	char	src[25]= "What the?";
-	size_t length;
-	
-	length = ft_strlcat(dest, src, 25);
-	printf("Length: %zu, srcstr: %s dest: %s", length, src, dest);
-}*/

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 15:46:42 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/05 17:43:47 by cestevez         ###   ########.fr       */
+/*   Created: 2023/01/17 20:39:11 by hdorado-          #+#    #+#             */
+/*   Updated: 2023/07/18 22:15:12 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	free_temp(char **tmp)
+void	ft_useless_tmp(char **tmp)
 {
 	if (!(*tmp)[0])
 	{
@@ -21,33 +21,33 @@ void	free_temp(char **tmp)
 	}
 }
 
-char	*return_line(char *buffer, char *str, char **tmp)
+char	*ft_return_line(char *buffer, char *str, char **tmp)
 {
 	int		i;
 	char	*final_str;
 
 	free(buffer);
 	buffer = NULL;
-	i = search_newline(str);
+	i = ft_search_nl(str);
 	if (i == -1)
 		i = (int) ft_strlen(str) - 1;
 	final_str = malloc(sizeof(char) * (i + 2));
 	if (!final_str)
-		return (heaths_error(NULL, tmp));
+		return (ft_error(NULL, tmp));
 	ft_strlcpy(final_str, str, i + 2);
 	free(*tmp);
 	*tmp = malloc(sizeof(char) * (ft_strlen(str) - i));
 	if (!*tmp)
-		return (heaths_error(&final_str, NULL));
+		return (ft_error(&final_str, NULL));
 	ft_strlcpy(*tmp, str + i + 1, ft_strlen(str) - i);
-	free_temp(tmp);
+	ft_useless_tmp(tmp);
 	free(str);
 	if (ft_strlen(final_str) == 0)
-		return (heaths_error(&final_str, tmp));
+		return (ft_error(&final_str, tmp));
 	return (final_str);
 }
 
-char	*append_str(char *str, char *buffer)
+char	*ft_append(char *str, char *buffer)
 {
 	int		len;
 	char	*str2;
@@ -80,11 +80,11 @@ char	*read_next_line(char **buffer, char **str, char **tmp, int fd)
 			}
 			break ;
 		}
-		*str = append_str(*str, *buffer);
+		*str = ft_append(*str, *buffer);
 		if (!*str)
 			break ;
-		if (search_newline(*str) != -1 || rd < BUFFER_SIZE)
-			return (return_line(*buffer, *str, &*tmp));
+		if (ft_search_nl(*str) != -1 || rd < BUFFER_SIZE)
+			return (ft_return_line(*buffer, *str, &*tmp));
 	}
 	free(*buffer);
 	return (NULL);
@@ -97,22 +97,48 @@ char	*get_next_line(int fd)
 	char		*str;
 
 	str = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!str)
-		return (NULL);
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (NULL);
 	ft_bzero(str, (BUFFER_SIZE + 1));
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!str || !buffer)
+		return (NULL);
 	if (tmp)
 	{
-		if (search_newline(tmp) != -1)
+		if (ft_search_nl(tmp) != -1)
 		{
 			ft_strlcpy(str, tmp, ft_strlen(tmp) + 1);
-			return (return_line(buffer, str, &tmp));
+			return (ft_return_line(buffer, str, &tmp));
 		}
-		str = append_str(str, tmp);
+		str = ft_append(str, tmp);
 		if (!str)
 			return (NULL);
 	}
 	return (read_next_line(&buffer, &str, &tmp, fd));
 }
+/*
+int	main(void)
+{
+	char	*str;
+	int	fd;
+
+	fd = open("read_error.txt", O_RDONLY);
+	str = get_next_line(fd);
+	printf("Result: %s\n", str);
+	free (str);
+	str = get_next_line(fd);
+	printf("Result: %s\n", str);
+	free (str);
+	str = get_next_line(-1);
+	printf("Result: %s\n", str);
+	free (str);
+	close(fd);
+	fd = open("read_error.txt", O_RDONLY);
+	str = get_next_line(fd);
+	printf("Result: %s\n", str);
+	free (str);
+	str = get_next_line(fd);
+	printf("Result: %s\n", str);
+	free (str);
+	str = get_next_line(fd);
+	printf("Result: %s\n", str);
+	free (str);
+}*/

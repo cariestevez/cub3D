@@ -3,28 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/02 16:25:12 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/02 17:35:17 by cestevez         ###   ########.fr       */
+/*   Created: 2022/11/29 19:15:00 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/15 20:32:34 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include <stdio.h>*/
 #include "libft.h"
-/*#include <unistd.h>*/
+
 int	ft_isalnum(int c)
 {
-	if ((c >= '0' && c <= '9')
-		|| (c > 64 && c < 91)
-		|| (c > 96 && c < 123))
+	if ((c >= 48 && c <= 57)
+		|| (c >= 65 && c <= 90)
+		|| (c >= 97 && c <= 122))
 		return (1);
-	else
-		return (0);
+	return (0);
 }
-/*int	main(int argc, char **argv)
+/*
+int	main(void)
 {
-	if (argc > 1)
-		ft_isalnum(argv[1][0]);
-	else
-		return(0);
+	printf("%d\n", ft_isalnum('a'));
+	printf("%d\n", ft_isalnum('.'));
+	printf("%d\n", ft_isalnum('1'));
+	printf("%d\n", ft_isalnum('['));
+	printf("%d\n", ft_isalnum('Z'));
+	printf("%d\n", ft_isalnum('9'));
 }*/

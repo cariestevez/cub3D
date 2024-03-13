@@ -3,43 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/09 20:34:27 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/18 00:00:29 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/08 19:03:37 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 17:36:57 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include <stdio.h>
+#include <string.h>*/
 #include "libft.h"
-/*#include <string.h>
-#include <stdio.h>*/
+
 void	*ft_memchr(const void *s, int c, size_t n)
 {
-	size_t					i;
-	unsigned char			*findhere;
-	unsigned char			tofind;
+	size_t		i;
+	const char	*str;
 
-	findhere = (unsigned char *)s;
-	tofind = c;
 	i = 0;
-	if (c == 0 && n == 0)
-		return (0);
-	if (n == 0)
-		return (0);
-	while (i < n - 1 && findhere[i] != tofind)
+	str = s;
+	while (n > i)
+	{
+		if (str[i] == (char)c)
+			return ((void *)str + i);
 		i++;
-	if (findhere[i] == tofind)
-		return (&findhere[i]);
-	else
-		return (0);
+	}
+	return (0);
 }
 /*
-int main()
+int	main(void)
 {
-	int	findme = 'O';
-	char	strtoscan[50] = "Encuentra a Oli";
+	char	str[50];
+	char	*str2;
 
-	ft_memchr(strtoscan, findme, 6);
-//	printf("'O' found at position %d.\n", strtoscan); 
-	printf("here: %s\n", strtoscan);
+	strcpy(str, "Hello world!");
+	puts(str);
+	str2 = memchr(str, '0', 3);
+	puts(str2);
 }*/

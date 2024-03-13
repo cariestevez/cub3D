@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/07 16:25:36 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/17 21:36:35 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/06 19:44:03 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 17:09:34 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*#include <stdio.h>
+#include <string.h>*/
 #include "libft.h"
-#include <stddef.h>
 
-/*#include <stdio.h>*/
 void	*ft_memset(void *s, int c, size_t n)
 {
-	unsigned char	*str;
-	size_t			i;
+	size_t	i;
+	char	*str;
 
 	str = s;
 	i = 0;
@@ -26,16 +26,17 @@ void	*ft_memset(void *s, int c, size_t n)
 		str[i] = c;
 		i++;
 	}
-	return ((void *)str);
+	return (str);
 }
-/*int	main()
-{
-	char	introduce = 'A';
-	char	string[100] = "";
-	int	times = 42;
+/*
+int main () {
+   char str[50];
 
-	printf("%s\n", string);
-	ft_memset(string, introduce, times);
-	printf("%s", string);
-	return (0);
+   strcpy(str,"This is string.h library function");
+   puts(str);
+
+   ft_carina_memset(str,'$',7);
+   puts(str);
+   
+   return(0);
 }*/

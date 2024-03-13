@@ -3,40 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hdorado- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 17:14:19 by cestevez          #+#    #+#             */
-/*   Updated: 2022/12/18 00:05:57 by cestevez         ###   ########.fr       */
+/*   Created: 2022/12/08 19:10:42 by hdorado-          #+#    #+#             */
+/*   Updated: 2022/12/17 17:11:27 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 /*#include <stdio.h>
 #include <string.h>*/
+#include "libft.h"
+
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	size_t						i;
-	const unsigned char			*str1;
-	const unsigned char			*str2;
-	unsigned char				dif1;
-	unsigned char				dif2;
+	char	*str1;
+	char	*str2;
+	size_t	i;
 
-	str1 = s1;
-	str2 = s2;
 	i = 0;
+	str1 = (char *)s1;
+	str2 = (char *)s2;
 	if (n == 0)
 		return (0);
-	while (str1[i] == str2[i] && i < (n - 1))
+	while (n - 1 > i)
+	{
+		if (str1[i] != str2[i])
+			return ((unsigned char)str1[i] - (unsigned char)str2[i]);
 		i++;
-	dif1 = str1[i];
-	dif2 = str2[i];
-	return (dif1 - dif2);
+	}
+	return ((unsigned char)str1[i] - (unsigned char)str2[i]);
 }
-
-/*int main()
-{
-	char str1[] = "Guachita liNda";
-	char str2[] = "Guachita Linda";
-
-	printf("%d\n", ft_memcmp(str1, str2, 1));
-}*/
