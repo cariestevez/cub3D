@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/13 17:26:01 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/15 12:59:02 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	save_textures(char **token, t_map *game)
 	int	i;
 
 	i = 0;
-	if (!token || token[2])
+	if (token[2])
 		return (1);
 	if (!game->path_wall_N && ft_strncmp(token[0], "NO", 3) == 0)
 		game->path_wall_N = ft_strdup(token[1]);
@@ -145,29 +145,36 @@ int	save_textures(char **token, t_map *game)
 	return (free_array(token), 0);
 }
 
-int	parse_textures(int fd, t_map *game, char **line)
+int	parse_textures(int fd, t_map *game, char *line)
 {
 	char 	**token;
 
 	token = NULL;
-	*line = get_next_line(fd);
-	if (ft_strlen(*line) == 0)
+	line = get_next_line(fd);//1st call
+	if (ft_strlen(line) == 0)
 		return (printf("Error\nMap is empty!\n"), 1);
-	while (ft_strlen(*line) && (!game->ceiling || !game->ground || !game->txtr_wall_N ||
+	while (ft_strlen(line) && (!game->ceiling || !game->ground || !game->txtr_wall_N ||
 		!game->txtr_wall_S || !game->txtr_wall_E || !game->txtr_wall_W))
 	{
-		ft_strtrim(*line, "\n");
-		token = ft_split(*line, ' ');
-		if (!token)
-			return (free_gnl_buff(fd, *line), 1);
-		else if (token[0][0] == '\0')
-			;
-		else if (save_textures(token, game))
-			return (printf("Error\nInvalid file format\n"), free_gnl_buff(fd, *line), 1);
+		line = ft_strtrim(line, "\n");
+		if (ft_strlen(line) == 0)//empty line=> keep reading
+		{
+			free(line);
+			line = get_next_line(fd);
+			continue ;
+		}
+		token = ft_split(line, ' ');//if str is only spaces, it returns a ptr to an array with 1 empty token
+		if (!token)//only if split fails allocating
+			return (free_gnl_buff(fd, line), 1);
+		if (save_textures(token, game))
+			return (printf("Error\nInvalid file format\n"), free_array(token), free_gnl_buff(fd, line), 1);
 		free_array(token);
-		free(*line);
-		*line = get_next_line(fd);
+		token = NULL;
+		free(line);
+		line = get_next_line(fd);
 	}
+	if (ft_strlen(line) == 0)//arrived at EOF (=>textures and/or map are missing)
+		return (printf("Error\nInvalid file format\n"), 1);
 	return (0);
 }
 
@@ -238,23 +245,21 @@ int	save_map_line(char *line, t_map *game)
 }
 
 //when we enter, from here there should just be empty lines or the map chars
-int	parse_map(int fd, t_map *game, char **line)
+int	parse_map(int fd, t_map *game, char *line)
 {
-	int		ret;
-
-	while (*line)
+	while (line)
 	{
-		if (ft_strlen(*line) == 1 && game->matrix == NULL)//empty line->gnl
+		if (ft_strlen(line) == 1 && game->matrix == NULL)//empty line(just '\n') before map =>keep reading
 			;
-		else if (game->matrix == NULL) && ft_strchr(&line)
+		else if (((game->matrix == NULL) && ft_strchr(line))
 			|| (ft_strlen(line) == 0 && game->matrix != NULL)
 			|| save_map_line(line, game))//EOF(=no map) or empty line in middle of map or error saving map
 		{
 			free_gnl_buff(fd, line);
 			return (printf("Error\nInvalid map format\n"), 1);
 		}
-		free(*line);
-		*line = get_next_line(fd);
+		free(line);
+		line = get_next_line(fd);
 	}
 	if (validate_map(game))
 		return (1);

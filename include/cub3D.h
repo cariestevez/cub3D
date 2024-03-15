@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/12 17:05:07 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/15 11:35:45 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ int		check_file(char *map);
 t_map	*init_game(void);
 void	init_game_2(t_map *game);
 
-int	parse_textures(int fd, t_map *game);
-int		save_textures(char *line, t_map *game);
+int		parse_textures(int fd, t_map *game, char *line);
+int		save_textures(char **token, t_map *game);
 
 // int		parse_and_validate(t_map *game, char **argv);
 // void	ft_mlxerror(t_map *game);
