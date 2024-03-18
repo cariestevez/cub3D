@@ -1,0 +1,31 @@
+main
+{
+//parse
+check_arg_num
+open_map
+parse_map
+close_map
+//execute
+draw_map
+set_movement_rules
+update
+//Finalization
+clean memory
+}
+
+parse
+{
+	argv==2
+	file must be .cub
+	open_map
+	Searh for:
+		NO + path //2 args only
+		SO + path //2 args only
+		WE + path //2 args only
+		EA + path //2 args only
+		F + 3 ints 0-255 (comma separated, string format)
+		C + 3 ints 0-255 (comma separated, string format)
+	Interpret map (How to know when it starts and when it finishes?):
+		Valid chars: N S W E 0 P
+
+}
