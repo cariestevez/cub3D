@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/15 11:35:45 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/18 18:30:55 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,26 @@ typedef struct s_map
 }	t_map;
 
 //main.c
-int		check_args(int argc, char **argv);
-int		check_file(char *map);
+int	args_check(int argc, char **argv);
+int	save_rgb(t_map *game, char **token);
+int	save_textures(char **token, t_map *game);
+int	parse_textures(int fd, t_map *game, char *line);
+int	is_closed(t_map *game);
+int	validate_map(t_map *game);
+int	save_map_line(char *line, t_map *game);
+int	is_empty_line(char *line);
+int	parse_map(int fd, t_map *game, char *line);
+int parsing(char *map_file, t_map *game);
 
+//init.c
 t_map	*init_game(void);
 void	init_game_2(t_map *game);
 
-int		parse_textures(int fd, t_map *game, char *line);
-int		save_textures(char **token, t_map *game);
+//free.c
+void	free_gnl_buff(int fd, char *line);
+void	free_array(char **arr);
+int		free_struct(t_map *game);
+
 
 // int		parse_and_validate(t_map *game, char **argv);
 // void	ft_mlxerror(t_map *game);

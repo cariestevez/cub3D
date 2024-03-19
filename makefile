@@ -8,6 +8,8 @@ LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm -lgl
 #LIBS	:= -L$(LIBFT) -L$(LIBMLX)/build -lft -ldl -lglfw -pthread -lm -lmlx42
 
 SRCS	:=	source/main.c \
+			source/free.c \
+			source/init.c \
 			#src/init_and_copy.c	\
 			src/pre_parsing.c	\
 			src/parsing.c	\
