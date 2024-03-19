@@ -1,11 +1,11 @@
-NAME		:= so_long
+NAME		:= cub3D
 CFLAGS		:= -g -Wextra -Wall -Werror -Wunreachable-code -Ofast
 LIBMLX		:= ./MLX42
 LIBFT		:= ./libft
 
 HEADERS	:= -I ./include -I $(LIBMLX)/include -I $(LIBFT)
-LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm -lglfw -framework Cocoa -framework OpenGL -framework IOKit
-#LIBS	:= -L$(LIBFT) -L$(LIBMLX)/build -lft -ldl -lglfw -pthread -lm -lmlx42
+#LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+LIBS	:= -L$(LIBFT) -L$(LIBMLX)/build -lft -ldl -lglfw -pthread -lm -lmlx42
 
 SRCS	:=	source/main.c \
 			source/free.c \

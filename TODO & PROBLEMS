@@ -1,0 +1,3 @@
+PARSING
+- check if RGB numbers are valid (0-255, 0-255, 0-255)
+- check if texture paths are valid and can be opened
