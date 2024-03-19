@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/19 17:20:26 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/19 17:53:41 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,12 @@ typedef struct s_player
 int	args_check(int argc, char **argv);
 int	save_rgb(t_map *game, char **token);
 int	save_textures(char **token, t_map *game);
-int	parse_textures(int fd, t_map *game, char *line);
+int	parse_textures(int fd, t_map *game, char **line);
 int	is_closed(t_map *game);
 int	validate_map(t_map *game);
 int	save_map_line(char *line, t_map *game);
 int	is_empty_line(char *line);
-int	parse_map(int fd, t_map *game, char *line);
+int	parse_map(int fd, t_map *game, char **line);
 int parsing(char *map_file, t_map *game);
 
 //init.c
