@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/18 18:32:48 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/19 17:21:23 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,7 @@ int	main(int argc, char **argv)
 	if (args_check(argc, argv)
 		|| parsing(argv[1], game))
 		return (free_struct(game), EXIT_FAILURE);
-
+	ft_initgame();
 	// game->mlx = mlx_init(32 * game->width, 32 * game->height, "xoxo", true);
 	// if (!game->mlx)
 	// 	ft_mlxerror(game);
