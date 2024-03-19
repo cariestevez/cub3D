@@ -4,7 +4,7 @@ t_map	*init_game(void)
 {
 	t_map *game;
 
-	game = (t_map *)malloc(sizeof(t_map));
+	game = (t_map *)ft_calloc(sizeof(t_map), 1);
 	if (!game)
 		return (NULL);
 	game->start_y = 0;
