@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/19 17:21:23 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/19 17:53:52 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	save_textures(char **token, t_map *game)
 	int	i;
 
 	i = 0;
-	if (token[0] == '\0')//(!token[1] && token[0] == '\0') to skip lines with only spaces
+	if (token && !token[0])//to skip lines with only spaces
 		return (0);
 	if (token[2])
 		return (1);
@@ -62,34 +62,33 @@ int	save_textures(char **token, t_map *game)
 	return (free_array(token), 0);
 }
 
-int	parse_textures(int fd, t_map *game, char *line)
+int	parse_textures(int fd, t_map *game, char **line)
 {
 	char 	**token;
 
 	token = NULL;
-	line = get_next_line(fd);//1st call
-	if (ft_strlen(line) == 0)
+	*line = get_next_line(fd);//1st call
+	if (ft_strlen(*line) == 0)
 		return (printf("Error\nMap is empty!\n"), 1);
-	while (ft_strlen(line) && (!game->ceiling || !game->ground || !game->txtr_wall_N ||
-		!game->txtr_wall_S || !game->txtr_wall_E || !game->txtr_wall_W))//fill map metadata
+	while (ft_strlen(*line) && (!game->ceiling || !game->ground || !game->path_wall_N ||
+		!game->path_wall_S || !game->path_wall_E || !game->path_wall_W))//fill map metadata
 	{
-		line = ft_strtrim(line, "\n");
-		if (ft_strlen(line) == 0)//empty line=> keep reading
+		*line = ft_strtrim(*line, "\n");
+		if (ft_strlen(*line) == 0)//empty *line=> keep reading
 		{
-			free(line);
-			line = get_next_line(fd);
+			free(*line);
+			*line = get_next_line(fd);
 			continue ;
 		}
-		token = ft_split(line, ' ');//if str is only spaces, it returns a ptr to an array with 1 empty token
+		token = ft_split(*line, ' ');//if str is only spaces, it returns a ptr to an array with 1 empty token
 		if (!token)//only if split fails allocating
-			return (free_gnl_buff(fd, line), 1);
-		if (save_textures(token, game)) //If an empty line had spaces only, we filter it here
-			return (printf("Error\nInvalid file format\n"), free_array(token), free_gnl_buff(fd, line), 1);
-		free_array(token);
-		free(line);
-		line = get_next_line(fd);
+			return (free_gnl_buff(fd, *line), 1);
+		if (save_textures(token, game)) //If an empty *line had spaces only, we filter it here
+			return (printf("Error\nInvalid file format\n"), free_gnl_buff(fd, *line), 1);
+		free(*line);
+		*line = get_next_line(fd);
 	}
-	if (ft_strlen(line) == 0)//arrived at EOF (=>textures and/or map are missing)
+	if (ft_strlen(*line) == 0)//arrived at EOF (=>textures and/or map are missing)
 		return (printf("Error\nInvalid file format\n"), 1);
 	return (0);
 }
@@ -100,13 +99,6 @@ int	is_closed(t_map *game)
 	int	j;
 
 	i = -1;
-	// Checks if the first line is only 1 or space. We can skip this I think, because the next logic would catch it nonetheless
-	// while (game->matrix[0][++i])
-	// {
-	// 	if (game->matrix[0][j] != ' ' || game->matrix[0][j] != '1')
-	// 		return (1);
-	// }
-	// i = 0;
 	while (game->matrix[++i])
 	{
 		j = -1;
@@ -118,11 +110,11 @@ int	is_closed(t_map *game)
 				|| game->matrix[i][j] == 'S' || game->matrix[i][j] == 'W'
 				|| game->matrix[i][j] == 'E') //If we find a 0 or player, and either of the "cross" positions doesn't exist or is space, the map is open
 			{
-				if ((!game->matrix[i - 1][j] || game->matrix[i - 1][j] == ' ')
-					|| (!game->matrix[i + 1][j] || game->matrix[i + 1][j] == ' ')
+				if ((!game->matrix[i - 1] || game->matrix[i - 1][j] == ' ')
+					|| (!game->matrix[i + 1] || game->matrix[i + 1][j] == ' ')
 					|| (!game->matrix[i][j + 1] || game->matrix[i][j + 1] == ' ')
 					|| (!game->matrix[i][j - 1] || game->matrix[i][j - 1] == ' '))
-						return (1);
+					return (1);
 			}
 		}
 	}
@@ -154,7 +146,7 @@ int	validate_map(t_map *game)
 				|| game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W')
 				n_player++;
 			else if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0' || game->matrix[i][j] == ' '))
-				return (printf("Error\nInvalid character in map\n"), 1);
+				return (printf("Error\nInvalid character when map expected\n"), 1);
 			j++;
 		}
 		i++;
@@ -179,9 +171,10 @@ int	save_map_line(char *line, t_map *game)
 
 	i = 0;
 	new_matrix = NULL;
+	printf("in save_map_line with line: %s\n", line);
 	while (game->matrix && game->matrix[i])
 		i++;
-	new_matrix = (char **)ft_calloc(sizeof(char *) * (i + 1));
+	new_matrix = (char **)ft_calloc(sizeof(char *), i + 2);
 	if (!new_matrix)
 		return (1);
 	i = 0;
@@ -200,31 +193,40 @@ int	save_map_line(char *line, t_map *game)
 
 int	is_empty_line(char *line)
 {
-	if (ft_strlen(line) == 0 || ft_strncmp(line, ' ', ft_strlen(line)) == 0)
+	int i;
+
+	i = 0;
+	if (ft_strlen(line) == 0)
 		return (1);
-	return (0);
+	while (i < (int)ft_strlen(line))
+	{
+		if (ft_strncmp(&line[i], " ", 1) != 0)
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-int	parse_map(int fd, t_map *game, char *line)
+int	parse_map(int fd, t_map *game, char **line)
 {
-	while (ft_strlen(line))
+	while (ft_strlen(*line))
 	{
-		line = ft_strtrim(line, "\n");
-		if (game->matrix == NULL && is_empty_line(line))
+		*line = ft_strtrim(*line, "\n");
+		if (game->matrix == NULL && is_empty_line(*line))
 		{
-			free(line);
-			line = get_next_line(fd);
+			free(*line);
+			*line = get_next_line(fd);
 			continue ;
 		}
-		else if (game->matrix != NULL && is_empty_line(line))//should we send map to validate and ignore the rest of the file from here or return error bc of empty line in the middle of the map?
+		else if (game->matrix != NULL && is_empty_line(*line))//should we send map to validate and ignore the rest of the file from here or return error bc of empty *line in the middle of the map?
 		{
-			free_gnl_buff(fd, line);
+			free_gnl_buff(fd, *line);
 			break ;
 		}
-		if (save_map_line(line, game))
-			return (printf("Error\nError saving map\n"), free_gnl_buff(fd, line), 1);
-		free(line);
-		line = get_next_line(fd);
+		else if (save_map_line(*line, game))
+			return (printf("Error\nError saving map\n"), free_gnl_buff(fd, *line), 1);
+		free(*line);
+		*line = get_next_line(fd);
 	}
 	return (validate_map(game));
 }
@@ -250,8 +252,7 @@ int	main(int argc, char **argv)
 	game = init_game();;
 	if (!game)
 		return (EXIT_FAILURE);
-	if (args_check(argc, argv)
-		|| parsing(argv[1], game))
+	if (args_check(argc, argv) || parsing(argv[1], game))
 		return (free_struct(game), EXIT_FAILURE);
 	ft_initgame();
 	// game->mlx = mlx_init(32 * game->width, 32 * game->height, "xoxo", true);
