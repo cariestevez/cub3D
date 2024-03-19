@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/18 18:30:55 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:14:54 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ typedef struct s_map
 int	args_check(int argc, char **argv);
 int	save_rgb(t_map *game, char **token);
 int	save_textures(char **token, t_map *game);
-int	parse_textures(int fd, t_map *game, char *line);
+int	parse_textures(int fd, t_map *game, char **line);
 int	is_closed(t_map *game);
 int	validate_map(t_map *game);
 int	save_map_line(char *line, t_map *game);
 int	is_empty_line(char *line);
-int	parse_map(int fd, t_map *game, char *line);
+int	parse_map(int fd, t_map *game, char **line);
 int parsing(char *map_file, t_map *game);
 
 //init.c
