@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/03/20 18:22:21 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:03:01 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,11 +180,8 @@ void ft_randomize(void* param)
 	}
 }
 
-int	ft_initgame(void)
+int	ft_initgame(t_map *game)
 {
-	t_map		*game = ft_calloc(1, sizeof(game));
-
-	ft_fake_game(game);
 	ft_populate_player(game);
 	game->id = mlx_init(960, 600, "Walking simulator", true);
 	// if (!game->id)
