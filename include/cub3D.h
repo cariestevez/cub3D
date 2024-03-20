@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/19 12:14:54 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/19 17:55:03 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,25 @@ typedef struct s_map
 	mlx_image_t		*img_wall_E;
 	mlx_image_t		*img_wall_W;
 }	t_map;
+
+typedef struct s_window
+{
+	mlx_t	*id;
+	mlx_image_t *w_id;
+}	t_window;
+
+typedef struct s_vector
+{
+	double	x;
+	double	y;
+}	t_vector;
+
+typedef struct s_player
+{
+	t_vector	pos;
+	t_vector	dir;
+	t_vector	camera;
+}	t_player;
 
 //main.c
 int	args_check(int argc, char **argv);
