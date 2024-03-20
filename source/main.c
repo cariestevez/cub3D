@@ -6,11 +6,17 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/19 17:24:23 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/20 18:18:44 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
+
+void	ft_mlxerror(t_map *game)
+{
+	ft_printf("%s\n", mlx_strerror(mlx_errno));
+	free_struct(game);
+}
 
 int	args_check(int argc, char **argv)
 {
@@ -31,13 +37,64 @@ int	args_check(int argc, char **argv)
 	return (0);
 }
 
-int	save_rgb(t_map *game, char **token)//add check for correct RGB?
+int	convert_rgb(char **rgb_char, char c, t_map *game)
 {
-	if (!game->ground && ft_strncmp(token[0], "F", 2) == 0)
-		return (game->ground = ft_strdup(token[1]), 0);
-	else if (!game->ceiling && ft_strncmp(token[0], "C", 2) == 0)
-		return (game->ceiling = ft_strdup(token[1]), 0);
-	return (1);
+	int				i;
+	int				raw_color;
+	unsigned long	hex_color;
+
+	i = -1;
+	raw_color = 0;
+	hex_color = 0;
+	while (rgb_char && rgb_char[++i])
+	{
+		raw_color = ft_atoi(rgb_char[i]);
+		if (!(raw_color >= 0 && raw_color <= 255))
+			return (printf("Error\nInvalid RGB color format\n"), 1);
+		if (i == 0)
+			hex_color += (raw_color & 0xff) << 16;
+		else if (i == 1)
+			hex_color += (raw_color & 0xff) << 8;
+		else if (i == 2)
+			hex_color += raw_color & 0xff;
+	}
+	if (c == 'C')
+		game->ceiling = hex_color;
+	else if (c == 'F')
+		game->ground = hex_color;
+	return (0);
+}
+
+int	validate_rgb(char c, char *raw_rgb, t_map *game)
+{
+	int i;
+	char **rgb_char;
+
+	i = 0;
+	rgb_char = ft_split(raw_rgb, ',');
+	if (!rgb_char)
+		return (1);
+	if ((rgb_char && rgb_char[3] != NULL)
+		|| (!rgb_char[0] || !rgb_char[1] || !rgb_char[2]))
+		return (printf("Error\nInvalid RGB format\n"), free_array(rgb_char), 1);
+	if (c == 'F' && convert_rgb(rgb_char, c, game))
+		return(free_array(rgb_char), 1);
+	else if (c == 'C' && convert_rgb(rgb_char, c, game))
+		return(free_array(rgb_char), 1);
+	return (free_array(rgb_char), 0);
+}
+
+int	parse_rgb(t_map *game, char **token)
+{
+	if (!game->ground && ft_strncmp(token[0], "F", 2) == 0
+		&& validate_rgb('F', token[1], game))
+			return (1);
+	else if (!game->ceiling && ft_strncmp(token[0], "C", 2) == 0
+		&& validate_rgb('C', token[1], game))
+			return (1);
+	else if (!game->ground && !game->ceiling && ft_strncmp(token[0], "F", 2) && ft_strncmp(token[0], "C", 2))
+		return (printf("Error\nInvalid file format\n"), 1);
+	return (0);
 }
 
 int	save_textures(char **token, t_map *game)
@@ -48,7 +105,7 @@ int	save_textures(char **token, t_map *game)
 	if (token && !token[0])//to skip lines with only spaces
 		return (0);
 	if (token[2])
-		return (1);
+		return (printf("Error\nToo many words in line\n"), 1);
 	if (!game->path_wall_N && ft_strncmp(token[0], "NO", 3) == 0)
 		game->path_wall_N = ft_strdup(token[1]);
 	else if (!game->path_wall_S && ft_strncmp(token[0], "SO", 3) == 0)
@@ -57,7 +114,7 @@ int	save_textures(char **token, t_map *game)
 		game->path_wall_E = ft_strdup(token[1]);
 	else if (!game->path_wall_W && ft_strncmp(token[0], "WE", 3) == 0)
 		game->path_wall_W = ft_strdup(token[1]);
-	else if (save_rgb(game, token))
+	else if (parse_rgb(game, token))
 		return (free_array(token), 1);
 	return (free_array(token), 0);
 }
@@ -67,28 +124,28 @@ int	parse_textures(int fd, t_map *game, char **line)
 	char 	**token;
 
 	token = NULL;
-	*line = get_next_line(fd);//1st call
+	*line = get_next_line(fd);
 	if (ft_strlen(*line) == 0)
 		return (printf("Error\nMap is empty!\n"), 1);
 	while (ft_strlen(*line) && (!game->ceiling || !game->ground || !game->path_wall_N ||
-		!game->path_wall_S || !game->path_wall_E || !game->path_wall_W))//fill map metadata
+		!game->path_wall_S || !game->path_wall_E || !game->path_wall_W))
 	{
 		*line = ft_strtrim(*line, "\n");
-		if (ft_strlen(*line) == 0)//empty *line=> keep reading
+		if (ft_strlen(*line) == 0)
 		{
 			free(*line);
 			*line = get_next_line(fd);
 			continue ;
 		}
-		token = ft_split(*line, ' ');//if str is only spaces, it returns a ptr to an array with 1 empty token
-		if (!token)//only if split fails allocating
+		token = ft_split(*line, ' ');
+		if (!token)
 			return (free_gnl_buff(fd, *line), 1);
-		if (save_textures(token, game)) //If an empty *line had spaces only, we filter it here
-			return (printf("Error\nInvalid file format\n"), free_gnl_buff(fd, *line), 1);
+		if (save_textures(token, game))
+			return (free_gnl_buff(fd, *line), 1);
 		free(*line);
 		*line = get_next_line(fd);
 	}
-	if (ft_strlen(*line) == 0)//arrived at EOF (=>textures and/or map are missing)
+	if (ft_strlen(*line) == 0)//arrived at EOF (=>textures and/or map are missing)-> I think this does nothing
 		return (printf("Error\nInvalid file format\n"), 1);
 	return (0);
 }
@@ -121,12 +178,6 @@ int	is_closed(t_map *game)
 	return (0);
 }
 
-//only 1, 0, N, S, E, W and space chars
-//there must be 1 position coord(N, S, E, W)
-	//there can just be 1 of them
-//at least 3x3
-//enclosed in walls
-//no spaces inside of the walls
 int	validate_map(t_map *game)
 {
 	int	i;
@@ -162,8 +213,6 @@ int	validate_map(t_map *game)
 	return (0);
 }
 
-//num of rows unknown, increasing each time we enter this function = i (y coord) --> to be reallocated
-//num of columns = length of map line = j (x coord)
 int	save_map_line(char *line, t_map *game)
 {
 	int	i;
@@ -245,22 +294,37 @@ int parsing(char *map_file, t_map *game)
 	return (close(fd), 0);
 }
 
+int	create_images(t_map *game)
+{
+	game->txtr_wall_N = mlx_load_png(game->path_wall_N);
+	game->txtr_wall_S = mlx_load_png(game->path_wall_S);
+	game->txtr_wall_E = mlx_load_png(game->path_wall_E);
+	game->txtr_wall_W = mlx_load_png(game->path_wall_W);
+	if (!game->txtr_wall_N || !game->txtr_wall_S || !game->txtr_wall_E
+		|| !game->txtr_wall_W)
+		return (1);//(printf("Error\nFailure loading textures\n"), 1);
+	game->img_wall_N = mlx_texture_to_image(game->mlx, game->txtr_wall_N);
+	game->img_wall_S = mlx_texture_to_image(game->mlx, game->txtr_wall_S);
+	game->img_wall_E = mlx_texture_to_image(game->mlx, game->txtr_wall_E);
+	game->img_wall_W = mlx_texture_to_image(game->mlx, game->txtr_wall_W);
+	if (!game->img_wall_N || !game->img_wall_S || !game->img_wall_E
+		|| !game->img_wall_W)
+		return (1);//(printf("Error\nFailure creating images\n"), 1);
+	return (0);
+}
+
+
 int	main(int argc, char **argv)
 {
 	t_map	*game;
 
-	game = init_game();;
+	game = init_struct();;
 	if (!game)
 		return (EXIT_FAILURE);
 	if (args_check(argc, argv) || parsing(argv[1], game))
 		return (free_struct(game), EXIT_FAILURE);
-
-	// game->mlx = mlx_init(32 * game->width, 32 * game->height, "xoxo", true);
-	// if (!game->mlx)
-	// 	ft_mlxerror(game);
-	// create_images(game);
-	// display_images(game);
-	// mlx_key_hook(game->mlx, &my_keyhook, game);
-	// mlx_loop(game->mlx);
+	if (create_images(game))
+		return (free_struct(game), EXIT_FAILURE);
+	ft_initgame();
 	return (free_struct(game), EXIT_SUCCESS);
 }
