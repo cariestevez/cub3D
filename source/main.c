@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/19 17:24:23 by cestevez         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/03/19 17:55:15 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/cub3D.h"
 
@@ -254,7 +255,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (args_check(argc, argv) || parsing(argv[1], game))
 		return (free_struct(game), EXIT_FAILURE);
-
+	ft_initgame();
 	// game->mlx = mlx_init(32 * game->width, 32 * game->height, "xoxo", true);
 	// if (!game->mlx)
 	// 	ft_mlxerror(game);
