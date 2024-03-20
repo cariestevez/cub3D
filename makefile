@@ -10,6 +10,7 @@ LIBS	:= -L$(LIBFT) -L$(LIBMLX)/build -lft -ldl -lglfw -pthread -lm -lmlx42
 SRCS	:=	source/main.c \
 			source/free.c \
 			source/init.c \
+			source/game.c \
 			#src/init_and_copy.c	\
 			src/pre_parsing.c	\
 			src/parsing.c	\

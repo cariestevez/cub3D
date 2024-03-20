@@ -1,6 +1,6 @@
 #include "../include/cub3D.h"
 
-t_map	*init_game(void)
+t_map	*init_struct(void)
 {
 	t_map *game;
 
@@ -11,14 +11,14 @@ t_map	*init_game(void)
 	game->start_x = 0;
 	game->matrix = NULL;
 	game->mlx = NULL;
-	init_game_2(game);
+	init_struct_2(game);
 	return (game);
 }
 
-void	init_game_2(t_map *game)
+void	init_struct_2(t_map *game)
 {
-	game->ceiling = NULL;
-	game->ground = NULL;
+	game->ceiling = 0;
+	game->ground = 0;
 
 	game->path_wall_N = NULL;
 	game->path_wall_S = NULL;

@@ -27,8 +27,6 @@ void	free_array(char **arr)
 
 int	free_struct(t_map *game)
 {
-	free(game->ceiling);
-	free(game->ground);
 	free(game->path_wall_N);
 	free(game->path_wall_S);
 	free(game->path_wall_E);
@@ -42,6 +40,8 @@ int	free_struct(t_map *game)
 	free(game->img_wall_E);
 	free(game->img_wall_W);
 	free_array(game->matrix);
-	free(game->mlx);
+	t_player		*player = NULL;
+	mlx_t			*id = NULL;
+	mlx_image_t		 *w_id = NULL;
 	return (0);
 }

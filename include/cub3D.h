@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/19 12:14:54 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/20 18:22:18 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,19 @@
 # define PL_EA      'E'
 # define PL_WE		'W'
 
+typedef struct s_vector
+{
+	double	x;
+	double	y;
+}	t_vector;
+
+typedef struct s_player
+{
+	t_vector	pos;
+	t_vector	dir;
+	t_vector	camera;
+}	t_player;
+
 typedef struct s_map
 {
 	// size_t			height;
@@ -45,9 +58,8 @@ typedef struct s_map
 	size_t			start_x;
 	//size_t			moves;
 	char			**matrix;
-	mlx_t			*mlx;
-	char			*ceiling;
-	char			*ground;
+	unsigned long	ceiling;
+	unsigned long	ground;
 	char			*path_wall_N;
 	char			*path_wall_S;
 	char			*path_wall_E;
@@ -60,28 +72,36 @@ typedef struct s_map
 	mlx_image_t		*img_wall_S;
 	mlx_image_t		*img_wall_E;
 	mlx_image_t		*img_wall_W;
+	t_player		*player;
+	mlx_t			*id;
+	mlx_image_t		 *w_id;
 }	t_map;
 
 //main.c
-int	args_check(int argc, char **argv);
-int	save_rgb(t_map *game, char **token);
-int	save_textures(char **token, t_map *game);
-int	parse_textures(int fd, t_map *game, char **line);
-int	is_closed(t_map *game);
-int	validate_map(t_map *game);
-int	save_map_line(char *line, t_map *game);
-int	is_empty_line(char *line);
-int	parse_map(int fd, t_map *game, char **line);
-int parsing(char *map_file, t_map *game);
+void	ft_mlxerror(t_map *game);
+int		args_check(int argc, char **argv);
+int		save_rgb(t_map *game, char **token);
+int		save_textures(char **token, t_map *game);
+int		parse_textures(int fd, t_map *game, char **line);
+int		is_closed(t_map *game);
+int		validate_map(t_map *game);
+int		save_map_line(char *line, t_map *game);
+int		is_empty_line(char *line);
+int		parse_map(int fd, t_map *game, char **line);
+int 	parsing(char *map_file, t_map *game);
 
 //init.c
-t_map	*init_game(void);
-void	init_game_2(t_map *game);
+t_map	*init_struct(void);
+void	init_struct_2(t_map *game);
 
 //free.c
 void	free_gnl_buff(int fd, char *line);
 void	free_array(char **arr);
 int		free_struct(t_map *game);
+
+//game.c
+int		ft_initgame(void);
+
 
 
 // int		parse_and_validate(t_map *game, char **argv);
