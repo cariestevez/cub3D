@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 23:29:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/20 23:29:43 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/21 12:28:45 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,31 @@ t_map	*init_struct(void)
 	if (!game)
 		return (NULL);
 	game->matrix = NULL;
-	init_graphics(game->graphics);
+	game->graphics = init_graphics(game);
 	game->player = NULL;
 	game->w_id = NULL;
 	game->id = NULL;
 	return (game);
 }
 
-void	init_graphics(t_graphics *graphics)
+t_graphics	*init_graphics(t_map *g)
 {
-	graphics->ceiling = 0;
-	graphics->ground = 0;
-	graphics->path_wall_N = NULL;
-	graphics->path_wall_S = NULL;
-	graphics->path_wall_E = NULL;
-	graphics->path_wall_W = NULL;
-	graphics->txtr_wall_N = NULL;
-	graphics->txtr_wall_S = NULL;
-	graphics->txtr_wall_E = NULL;
-	graphics->txtr_wall_W = NULL;
-	graphics->img_wall_N = NULL;
-	graphics->img_wall_S = NULL;
-	graphics->img_wall_E = NULL;
-	graphics->img_wall_W = NULL;
+	g->graphics = (t_graphics *)calloc(sizeof(t_graphics), 1);
+	if (!g->graphics)
+		return (NULL);
+	g->graphics->ceiling = 0;
+	g->graphics->ground = 0;
+	g->graphics->path_wall_N = NULL;
+	g->graphics->path_wall_S = NULL;
+	g->graphics->path_wall_E = NULL;
+	g->graphics->path_wall_W = NULL;
+	g->graphics->txtr_wall_N = NULL;
+	g->graphics->txtr_wall_S = NULL;
+	g->graphics->txtr_wall_E = NULL;
+	g->graphics->txtr_wall_W = NULL;
+	g->graphics->img_wall_N = NULL;
+	g->graphics->img_wall_S = NULL;
+	g->graphics->img_wall_E = NULL;
+	g->graphics->img_wall_W = NULL;
+	return (g->graphics);
 }

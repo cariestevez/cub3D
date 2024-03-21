@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/20 22:48:45 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/21 12:30:01 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (args_check(argc, argv) || parsing(argv[1], game))
 		return (free_struct(game), EXIT_FAILURE);
+	printf("hello\n");
 	if (create_images(game, game->graphics))
 		return (free_struct(game), EXIT_FAILURE);
 	//from here use ft_terminate to free
