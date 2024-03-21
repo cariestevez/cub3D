@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 12:30:01 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:50:39 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (args_check(argc, argv) || parsing(argv[1], game))
 		return (free_struct(game), EXIT_FAILURE);
-	printf("hello\n");
-	if (create_images(game, game->graphics))
-		return (free_struct(game), EXIT_FAILURE);
 	//from here use ft_terminate to free
 	game->id = mlx_init(960, 600, "xoxo", true);
 	if (!game->id)
 		return (ft_mlxerror(game), EXIT_FAILURE);
-	//ft_initgame();
+	printf("hello\n");
+	if (create_images(game, game->graphics))
+		return (free_struct(game), EXIT_FAILURE);
+	ft_initgame(game);
 	//mlx_close_window(game->id);
 	return (ft_terminate(game), EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/03/19 17:32:38 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/21 15:39:22 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,30 @@ t_vector	ft_fill_vector(double x, double y)
 	return (vector);
 }
 
-void	ft_populate_player(t_map *game)
+void	ft_populate_player(t_map *game, int x, int y, char dir)
 {
 	game->player = ft_calloc(sizeof(t_player), 1);
-	game->player->pos = ft_fill_vector(2, 8);
-	game->player->dir = ft_fill_vector(0, -1);
-	game->player->camera = ft_fill_vector(0.66, 0);
+	game->player->pos = ft_fill_vector(x, y);
+	if (dir == 'N')
+	{
+		game->player->dir = ft_fill_vector(-1, 0);
+		game->player->camera = ft_fill_vector(0, 0.66);
+	}
+	else if (dir == 'S')
+	{
+		game->player->dir = ft_fill_vector(1, 0);
+		game->player->camera = ft_fill_vector(0, 0.66);
+	}
+	else if (dir == 'W')
+	{
+		game->player->dir = ft_fill_vector(0, 1);
+		game->player->camera = ft_fill_vector(0.66, 0);
+	}
+	else if (dir == 'E')
+	{
+		game->player->dir = ft_fill_vector(0, -1);
+		game->player->camera = ft_fill_vector(0.66, 0);
+	}
 }
 
 int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
@@ -92,22 +110,22 @@ void	ft_raycast(void *param)
 		if (ray.x < 0)
 		{
 			stepX = -1;
-			sideDistX = (game->player->pos.x - mapX) * deltaDistX;
+			sideDistX = (game->player->pos.x - mapX + 0.5) * deltaDistX;
 		}
 		else
 		{
 			stepX = 1;
-			sideDistX = (mapX + 1.0 - game->player->pos.x) * deltaDistX;
+			sideDistX = (mapX + 0.5 - game->player->pos.x) * deltaDistX;
 		}
 		if (ray.y < 0)
 		{
 			stepY = -1;
-			sideDistY = (game->player->pos.y - mapY) * deltaDistY;
+			sideDistY = (game->player->pos.y - mapY + 0.5) * deltaDistY;
 		}
 		else
 		{
 			stepY = 1;
-			sideDistY = (mapY + 1.0 - game->player->pos.y) * deltaDistY;
+			sideDistY = (mapY + 0.5 - game->player->pos.y) * deltaDistY;
 		}
 		while (!hit)
 		{
@@ -182,8 +200,8 @@ void ft_randomize(void* param)
 
 int	ft_initgame(t_map *game)
 {
-	ft_populate_player(game);
-	game->id = mlx_init(960, 600, "Walking simulator", true);
+	//ft_populate_player(game);
+	//game->id = mlx_init(960, 600, "Walking simulator", true);
 	// if (!game->id)
 	// 	ft_mlxerror(game);
 	game->w_id = mlx_new_image(game->id, 960, 600);
