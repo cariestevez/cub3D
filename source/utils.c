@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:42:28 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/20 23:32:18 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/21 12:31:36 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	create_images(t_map *game, t_graphics *graphic)
 	if (!graphic->txtr_wall_N || !graphic->txtr_wall_S
 		|| !graphic->txtr_wall_E || !graphic->txtr_wall_W)
 		return (1);
+	printf("in create_images\n");
 	graphic->img_wall_N = mlx_texture_to_image(game->id, graphic->txtr_wall_N);
 	graphic->img_wall_S = mlx_texture_to_image(game->id, graphic->txtr_wall_S);
 	graphic->img_wall_E = mlx_texture_to_image(game->id, graphic->txtr_wall_E);

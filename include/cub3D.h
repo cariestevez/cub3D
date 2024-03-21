@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/20 22:54:30 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/21 12:28:31 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,39 +75,39 @@ typedef struct s_map
 }	t_map;
 
 //main.c
-int		args_check(int argc, char **argv);
+int			args_check(int argc, char **argv);
 
 //init.c
-t_map	*init_struct(void);
-void	init_graphics(t_graphics *graphics);
+t_map		*init_struct(void);
+t_graphics	*init_graphics(t_map *g);
 
 //free.c
-void	free_gnl_buff(int fd, char *line);
-void	free_array(char **arr);
-void	free_graphics(t_graphics *graphic);
-void	free_struct(t_map *game);
-void	ft_terminate(t_map *game);
+void		free_gnl_buff(int fd, char *line);
+void		free_array(char **arr);
+void		free_graphics(t_graphics *graphic);
+void		free_struct(t_map *game);
+void		ft_terminate(t_map *game);
 
 //parsing.c
-int		save_map_line(char *line, t_map *game);
-int		parse_rgb(t_map *game, char **token);
-int		parse_map(int fd, t_map *game, char **line);
-int		parse_textures(int fd, t_map *game, char **line);
-int 	parsing(char *map_file, t_map *game);
+int			save_map_line(char *line, t_map *game);
+int			parse_rgb(t_map *game, char **token);
+int			parse_map(int fd, t_map *game, char **line);
+int			parse_textures(int fd, t_map *game, char **line);
+int 		parsing(char *map_file, t_map *game);
 
 //validation_checks.c
-int		is_closed(t_map *game);
-int		save_rgb(char **rgb_char, char c, t_map *game);
-int		validate_rgb(char c, char *raw_rgb, t_map *game);
-int		save_textures(char **token, t_map *game);
-int		validate_map(t_map *game);
+int			is_closed(t_map *game);
+int			save_rgb(char **rgb_char, char c, t_map *game);
+int			validate_rgb(char c, char *raw_rgb, t_map *game);
+int			save_textures(char **token, t_map *game);
+int			validate_map(t_map *game);
 
 //utils.c
-int		is_empty_line(char *line);
-void	ft_mlxerror(t_map *game);
-int		create_images(t_map *game, t_graphics *graphics);
+int			is_empty_line(char *line);
+void		ft_mlxerror(t_map *game);
+int			create_images(t_map *game, t_graphics *graphics);
 
 //game.c
-int	ft_initgame(t_map *game);
+int			ft_initgame(t_map *game);
 
 #endif
