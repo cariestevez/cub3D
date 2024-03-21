@@ -1,3 +1,8 @@
-PARSING
-- check if RGB numbers are valid (0-255, 0-255, 0-255)
-- check if texture paths are valid and can be opened
+PARSING done 
+
+RENDERING
+- choose some nice textures
+- write put_pixel
+
+MISCELANEOUS
+- merge with Heath's raycast

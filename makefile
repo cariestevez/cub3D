@@ -4,12 +4,16 @@ LIBMLX		:= ./MLX42
 LIBFT		:= ./libft
 
 HEADERS	:= -I ./include -I $(LIBMLX)/include -I $(LIBFT)
-#LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+#LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
 LIBS	:= -L$(LIBFT) -L$(LIBMLX)/build -lft -ldl -lglfw -pthread -lm -lmlx42
 
 SRCS	:=	source/main.c \
-			source/free.c \
 			source/init.c \
+			source/free.c \
+			source/parsing.c \
+			source/validation_checks.c \
+			source/utils.c \
+			source/game.c \
 			#src/init_and_copy.c	\
 			src/pre_parsing.c	\
 			src/parsing.c	\
