@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 14:37:51 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:53:45 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,9 @@
 # include <errno.h>
 # include <math.h>
 
-# define WIN_WIDTH 	640
-# define WIN_HEIGHT 640
-# define WALL		'1'
-# define GROUND		'0'
-# define PL_NO      'N'
-# define PL_SO		'S'
-# define PL_EA      'E'
-# define PL_WE		'W'
+# define WIN_WIDTH 	960
+# define WIN_HEIGHT 600
+# define BPP sizeof(int32_t)// Bytes Per Pixel. Since each pixel is represented as an integer, it will be four bytes for four channels.
 
 
 typedef struct s_vector
@@ -77,6 +72,7 @@ typedef struct s_map
 
 //main.c
 int			args_check(int argc, char **argv);
+int			ft_initgame(t_map *game);
 
 //init.c
 t_map		*init_struct(void);
@@ -106,9 +102,19 @@ int			validate_map(t_map *game);
 //utils.c
 int			is_empty_line(char *line);
 void		ft_mlxerror(t_map *game);
+void		ft_populate_player(t_map *game);
+t_vector	ft_fill_vector(double x, double y);
+
+//rendering.c
+void		render_floor_ceiling(t_map *game);
 int			create_images(t_map *game, t_graphics *graphics);
+void		putpixel(int x, int y, int color);
+void		ft_put_pixel(mlx_image_t *image, int x, int y, unsigned long color);
 
 //game.c
-int			ft_initgame(t_map *game);
+void		ft_fake_game(t_map *game);
+int32_t		ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a);
+void		ft_randomize(void* param);
+void		ft_raycast(void *param);
 
 #endif

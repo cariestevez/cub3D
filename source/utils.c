@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:42:28 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 12:31:36 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:48:47 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,19 @@ int	is_empty_line(char *line)
 	return (1);
 }
 
-int	create_images(t_map *game, t_graphics *graphic)
+void	ft_populate_player(t_map *game)
 {
-	graphic->txtr_wall_N = mlx_load_png(graphic->path_wall_N);
-	graphic->txtr_wall_S = mlx_load_png(graphic->path_wall_S);
-	graphic->txtr_wall_E = mlx_load_png(graphic->path_wall_E);
-	graphic->txtr_wall_W = mlx_load_png(graphic->path_wall_W);
-	if (!graphic->txtr_wall_N || !graphic->txtr_wall_S
-		|| !graphic->txtr_wall_E || !graphic->txtr_wall_W)
-		return (1);
-	printf("in create_images\n");
-	graphic->img_wall_N = mlx_texture_to_image(game->id, graphic->txtr_wall_N);
-	graphic->img_wall_S = mlx_texture_to_image(game->id, graphic->txtr_wall_S);
-	graphic->img_wall_E = mlx_texture_to_image(game->id, graphic->txtr_wall_E);
-	graphic->img_wall_W = mlx_texture_to_image(game->id, graphic->txtr_wall_W);
-	if (!graphic->img_wall_N || !graphic->img_wall_S || !graphic->img_wall_E
-		|| !graphic->img_wall_W)
-		return (1);
-	return (0);
+	game->player = ft_calloc(sizeof(t_player), 1);
+	game->player->pos = ft_fill_vector(2, 8);
+	game->player->dir = ft_fill_vector(0, -1);
+	game->player->camera = ft_fill_vector(0.66, 0);
+}
+
+t_vector	ft_fill_vector(double x, double y)
+{
+	t_vector	vector;
+
+	vector.x = x;
+	vector.y = y;
+	return (vector);
 }

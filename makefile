@@ -14,6 +14,7 @@ SRCS	:=	source/main.c \
 			source/validation_checks.c \
 			source/utils.c \
 			source/game.c \
+			source/rendering.c \
 			#src/init_and_copy.c	\
 			src/pre_parsing.c	\
 			src/parsing.c	\

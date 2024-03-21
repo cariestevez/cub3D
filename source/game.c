@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/03/19 17:32:38 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:48:24 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,6 @@ void	ft_fake_game(t_map *game)
 	arr[9] = "1111111111";
 	arr[10] = 0;
 	game->matrix = arr;
-}
-
-t_vector	ft_fill_vector(double x, double y)
-{
-	t_vector	vector;
-
-	vector.x = x;
-	vector.y = y;
-	return (vector);
-}
-
-void	ft_populate_player(t_map *game)
-{
-	game->player = ft_calloc(sizeof(t_player), 1);
-	game->player->pos = ft_fill_vector(2, 8);
-	game->player->dir = ft_fill_vector(0, -1);
-	game->player->camera = ft_fill_vector(0.66, 0);
 }
 
 int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
@@ -178,18 +161,4 @@ void ft_randomize(void* param)
 			mlx_put_pixel(game->w_id, i, y, ft_pixel(0xFF, 0x00, 0x00, 0x80));
 		}
 	}
-}
-
-int	ft_initgame(t_map *game)
-{
-	ft_populate_player(game);
-	game->id = mlx_init(960, 600, "Walking simulator", true);
-	// if (!game->id)
-	// 	ft_mlxerror(game);
-	game->w_id = mlx_new_image(game->id, 960, 600);
-	ft_raycast((void *) game);
-	mlx_image_to_window(game->id, game->w_id, 0, 0);
-	//mlx_loop_hook(game->id, ft_raycast, game);
-	mlx_loop(game->id);
-	return (0);
 }

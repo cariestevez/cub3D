@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validation_checks.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/20 23:36:12 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:06:58 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ int	validate_map(t_map *game)
 		{
 			if (game->matrix[i][j] == 'N' || game->matrix[i][j] == 'S'
 				|| game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W')
+			{
+				//ft_populate_player(game);
 				n_player++;
+			}
 			else if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0'
 				|| game->matrix[i][j] == ' '))
 				return (printf("Error\nInvalid char when map expected\n"), 1);
