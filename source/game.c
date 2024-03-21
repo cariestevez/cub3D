@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/03/21 15:39:22 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/21 18:22:32 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,14 @@ void	ft_raycast(void *param)
 
 	game = (t_map *) param;
 	i = -1.0;
+	int	k = -1;
+	int	l;
+	while (++k < 960)
+	{
+		l = -1;
+		while (++l < 600)
+			mlx_put_pixel(game->w_id, k, l, ft_pixel(0x00, 0x00, 0x00, 0xFF));
+	}
 	while (++i < 960) //For each (vertical column of) pixel in the screen
 	{
 		section = (2*i/959) - 1; //(959 because of 0), this will select each column
@@ -173,11 +181,11 @@ void	ft_raycast(void *param)
 		while (j <= drawEnd)
 		{
 			if (side)
-				mlx_put_pixel(game->w_id, (int) i, j, ft_pixel(0xFF, 0x00, 0x00, 0x80));
+				mlx_put_pixel(game->w_id, (int) i, j, ft_pixel(0xFF, 0x00, 0x00, 0xFF));
 			else
 			{
 				//printf("Side is good\n");
-				mlx_put_pixel(game->w_id, (int) i, j, ft_pixel(0x00, 0xFF, 0x00, 0x80));
+				mlx_put_pixel(game->w_id, (int) i, j, ft_pixel(0x00, 0xFF, 0x00, 0xFF));
 			}
 			j++;
 		}
@@ -198,16 +206,81 @@ void ft_randomize(void* param)
 	}
 }
 
+void	move_camera(t_map *game, char dir)
+{
+	double	angle;
+
+	angle = asin(game->player->dir.x);
+	printf("angle: %f\n", angle);
+	if (dir == 'L')
+		angle += asin(0.5);
+	else if (dir == 'R')
+		angle -= asin(0.5);
+	if (angle > 1.570796)
+		angle -= 2*1.570796;
+	else if (angle < -1.570796)
+		angle += 2*1.570796;
+	game->player->dir.x = sin(angle);
+	game->player->dir.y = cos(angle);
+	game->player->camera.x = cos(angle)*0.66;
+	game->player->camera.y = sin(angle)*0.66;
+}
+
+void	move_player(t_map *game, char dir)
+{
+	if (dir == 'N')
+	{
+		if (game->matrix[(int)game->player->pos.x -1][(int)game->player->pos.y] == '0')
+			game->player->pos.x--;
+	}
+	else if (dir == 'S')
+	{
+		if (game->matrix[(int)game->player->pos.x +1][(int)game->player->pos.y] == '0')
+			game->player->pos.x++;
+	}
+	else if (dir == 'E')
+	{
+		if (game->matrix[(int)game->player->pos.x][(int)game->player->pos.y - 1] == '0')
+			game->player->pos.y--;
+	}
+	else if (dir == 'W')
+	{
+		if (game->matrix[(int)game->player->pos.x][(int)game->player->pos.y + 1] == '0')
+			game->player->pos.y++;
+	}
+}
+
+void	ft_my_keys(mlx_key_data_t keydata, void *param)
+{
+	t_map *game;
+
+	game = (t_map *)param;
+	if (keydata.key == MLX_KEY_ESCAPE)
+		mlx_close_window(game->id);
+	else if (keydata.key == MLX_KEY_LEFT)
+		move_camera(game, 'L');
+	else if (keydata.key == MLX_KEY_RIGHT)
+		move_camera(game, 'R');
+	else if (keydata.key == MLX_KEY_A)
+		move_player(game, 'W');
+	else if (keydata.key == MLX_KEY_S)
+		move_player(game, 'S');
+	else if (keydata.key == MLX_KEY_D)
+		move_player(game, 'E');
+	else if (keydata.key == MLX_KEY_W)
+		move_player(game, 'N');
+}
+
 int	ft_initgame(t_map *game)
 {
-	//ft_populate_player(game);
 	//game->id = mlx_init(960, 600, "Walking simulator", true);
 	// if (!game->id)
 	// 	ft_mlxerror(game);
 	game->w_id = mlx_new_image(game->id, 960, 600);
-	ft_raycast((void *) game);
+	//ft_raycast((void *) game);
 	mlx_image_to_window(game->id, game->w_id, 0, 0);
-	//mlx_loop_hook(game->id, ft_raycast, game);
+	mlx_key_hook(game->id, ft_my_keys, game);
+	mlx_loop_hook(game->id, ft_raycast, game);
 	mlx_loop(game->id);
 	return (0);
 }
