@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 17:53:56 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/23 01:32:43 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ int	args_check(int argc, char **argv)
 
 int	ft_initgame(t_map *game)
 {
-	
-	printf("in init game\n");
 	game->id = mlx_init(WIN_WIDTH, WIN_HEIGHT, "xoxo", true);
 	if (!game->id)
 		return (ft_mlxerror(game), EXIT_FAILURE);
@@ -71,7 +69,7 @@ int	ft_initgame(t_map *game)
 	printf("after create images\n");
 	game->w_id = mlx_new_image(game->id, WIN_WIDTH, WIN_HEIGHT);
 	// ft_raycast((void *) game);
-	//render_floor_ceiling(game);
+	render_floor_ceiling(game);
 	mlx_image_to_window(game->id, game->w_id, 0, 0);
 	//mlx_loop_hook(game->id, ft_raycast, game);
 	mlx_loop(game->id);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 17:53:45 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/22 23:51:35 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@
 # define WIN_WIDTH 	960
 # define WIN_HEIGHT 600
 # define BPP sizeof(int32_t)// Bytes Per Pixel. Since each pixel is represented as an integer, it will be four bytes for four channels.
-
+# define CEILING	'C'
+# define FLOOR		'F'
 
 typedef struct s_vector
 {
@@ -45,8 +46,8 @@ typedef struct s_player
 
 typedef struct s_graphics
 {
-	unsigned long	ceiling;
-	unsigned long	ground;
+	uint32_t		ceiling;
+	uint32_t		ground;
 	char			*path_wall_N;
 	char			*path_wall_S;
 	char			*path_wall_E;
@@ -109,7 +110,7 @@ t_vector	ft_fill_vector(double x, double y);
 void		render_floor_ceiling(t_map *game);
 int			create_images(t_map *game, t_graphics *graphics);
 void		putpixel(int x, int y, int color);
-void		ft_put_pixel(mlx_image_t *image, int x, int y, unsigned long color);
+void		ft_put_pixel(mlx_image_t *image, int x, int y, uint32_t color);
 
 //game.c
 void		ft_fake_game(t_map *game);

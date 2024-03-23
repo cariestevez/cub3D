@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validation_checks.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 17:06:58 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/03/22 23:59:46 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ int	save_textures(char **token, t_map *game)
 
 int	save_rgb(char **rgb_char, char c, t_map *game)
 {
-	int				i;
-	int				raw_color;
-	unsigned long	hex_color;
+	int			i;
+	int			raw_color;
+	uint32_t	hex_color;
 
 	i = -1;
 	raw_color = 0;
@@ -106,18 +106,20 @@ int	save_rgb(char **rgb_char, char c, t_map *game)
 	while (rgb_char && rgb_char[++i])
 	{
 		raw_color = ft_atoi(rgb_char[i]);
+		printf("int color[%d]: %d\n", i, raw_color);
 		if (!(raw_color >= 0 && raw_color <= 255))
 			return (printf("Error\nInvalid RGB color format\n"), 1);
-		if (i == 0)
+		if (i == 0)//red
+			hex_color += (raw_color & 0xff) << 24;
+		else if (i == 1)//green
 			hex_color += (raw_color & 0xff) << 16;
-		else if (i == 1)
+		else if (i == 2)//blue
 			hex_color += (raw_color & 0xff) << 8;
-		else if (i == 2)
-			hex_color += raw_color & 0xff;
+		printf("hex color[%d]: %x\n", i, hex_color);
 	}
-	if (c == 'C')
+	if (c == CEILING)
 		game->graphics->ceiling = hex_color;
-	else if (c == 'F')
+	else if (c == FLOOR)
 		game->graphics->ground = hex_color;
 	return (0);
 }
