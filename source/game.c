@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/03/21 18:22:32 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/21 23:38:58 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_vector	ft_fill_vector(double x, double y)
 void	ft_populate_player(t_map *game, int x, int y, char dir)
 {
 	game->player = ft_calloc(sizeof(t_player), 1);
-	game->player->pos = ft_fill_vector(x, y);
+	game->player->pos = ft_fill_vector(x + 0.5, y + 0.5);
 	if (dir == 'N')
 	{
 		game->player->dir = ft_fill_vector(-1, 0);
@@ -55,7 +55,7 @@ void	ft_populate_player(t_map *game, int x, int y, char dir)
 	else if (dir == 'S')
 	{
 		game->player->dir = ft_fill_vector(1, 0);
-		game->player->camera = ft_fill_vector(0, 0.66);
+		game->player->camera = ft_fill_vector(0, -0.66);
 	}
 	else if (dir == 'W')
 	{
@@ -65,7 +65,7 @@ void	ft_populate_player(t_map *game, int x, int y, char dir)
 	else if (dir == 'E')
 	{
 		game->player->dir = ft_fill_vector(0, -1);
-		game->player->camera = ft_fill_vector(0.66, 0);
+		game->player->camera = ft_fill_vector(-0.66, 0);
 	}
 }
 
@@ -118,22 +118,22 @@ void	ft_raycast(void *param)
 		if (ray.x < 0)
 		{
 			stepX = -1;
-			sideDistX = (game->player->pos.x - mapX + 0.5) * deltaDistX;
+			sideDistX = (game->player->pos.x - mapX) * deltaDistX;
 		}
 		else
 		{
 			stepX = 1;
-			sideDistX = (mapX + 0.5 - game->player->pos.x) * deltaDistX;
+			sideDistX = (mapX + 1.0 - game->player->pos.x) * deltaDistX;
 		}
 		if (ray.y < 0)
 		{
 			stepY = -1;
-			sideDistY = (game->player->pos.y - mapY + 0.5) * deltaDistY;
+			sideDistY = (game->player->pos.y - mapY) * deltaDistY;
 		}
 		else
 		{
 			stepY = 1;
-			sideDistY = (mapY + 0.5 - game->player->pos.y) * deltaDistY;
+			sideDistY = (mapY + 1.0 - game->player->pos.y) * deltaDistY;
 		}
 		while (!hit)
 		{
@@ -169,7 +169,7 @@ void	ft_raycast(void *param)
 		if (WallDist == 0)
 			lineHeight = 600;
 		else
-			lineHeight = (int)(600 / WallDist);
+			lineHeight = (int)(600/ WallDist);
 		//calculate lowest and highest pixel to fill in current stripe: 0 is the center of the screen, so half the line should go negative and the other positive. If it's higher than the margins, stop at 0/highest margin
 		int drawStart = -lineHeight / 2 + 600 / 2;
 		if(drawStart < 0)
@@ -209,44 +209,61 @@ void ft_randomize(void* param)
 void	move_camera(t_map *game, char dir)
 {
 	double	angle;
-
-	angle = asin(game->player->dir.x);
-	printf("angle: %f\n", angle);
+	//Angles are backward since "north" is negative. We want to calculate the angle between 0 and 2*PI radians
+	//Reminder:
+	//0 degrees = 360 degrees = 0 radians = 2*PI radians
+	//90 degrees = PI/2
+	//180 degrees = PI
+	//270 degrees = 3*PI/2
+	if (game->player->dir.y >= 0 && game->player->dir.x <= 0)//If Y is positive but X negative, we are facing northwestish (0-90)
+		angle = acos(game->player->dir.y); //Angle between 0-90 degrees, so this is good
+	else if (game->player->dir.y >= 0 && game->player->dir.x >= 0)//We are facing southwestish (270-360)
+		angle = 2*PI - acos(game->player->dir.y);//acos gives us only the 0-180 degrees, so we need to adjust the angle
+	else if (game->player->dir.y < 0 && game->player->dir.x >= 0)//We are facing southeastish (180-270)
+		angle = 2*PI - acos(game->player->dir.y);//Again, we need to adjust the angle
+	else //We are facing norththeastish (90-180)
+		angle = acos(game->player->dir.y); //acos works again
 	if (dir == 'L')
-		angle += asin(0.5);
+		angle -= PI/36;
 	else if (dir == 'R')
-		angle -= asin(0.5);
-	if (angle > 1.570796)
-		angle -= 2*1.570796;
-	else if (angle < -1.570796)
-		angle += 2*1.570796;
-	game->player->dir.x = sin(angle);
+		angle += PI/36;
+	if (angle >= 2*PI)
+		angle -= 2*PI;
+	else if (angle < 0)
+		angle += 2*PI;
+	game->player->dir.x = -sin(angle);
 	game->player->dir.y = cos(angle);
-	game->player->camera.x = cos(angle)*0.66;
-	game->player->camera.y = sin(angle)*0.66;
+	game->player->camera.x = -sin(angle + PI/2)*0.66;
+	game->player->camera.y = cos(angle + PI/2)*0.66;
 }
 
 void	move_player(t_map *game, char dir)
 {
+	t_vector tmp_pos;
 	if (dir == 'N')
 	{
-		if (game->matrix[(int)game->player->pos.x -1][(int)game->player->pos.y] == '0')
-			game->player->pos.x--;
+		tmp_pos.x = game->player->pos.x + 0.2*game->player->dir.x;
+		tmp_pos.y = game->player->pos.y + 0.2*game->player->dir.y;
 	}
 	else if (dir == 'S')
 	{
-		if (game->matrix[(int)game->player->pos.x +1][(int)game->player->pos.y] == '0')
-			game->player->pos.x++;
+		tmp_pos.x = game->player->pos.x - 0.2*game->player->dir.x;
+		tmp_pos.y = game->player->pos.y - 0.2*game->player->dir.y;
 	}
 	else if (dir == 'E')
 	{
-		if (game->matrix[(int)game->player->pos.x][(int)game->player->pos.y - 1] == '0')
-			game->player->pos.y--;
+		tmp_pos.x = game->player->pos.x - 0.2*game->player->dir.y;
+		tmp_pos.y = game->player->pos.y + 0.2*game->player->dir.x;
 	}
 	else if (dir == 'W')
 	{
-		if (game->matrix[(int)game->player->pos.x][(int)game->player->pos.y + 1] == '0')
-			game->player->pos.y++;
+		tmp_pos.x = game->player->pos.x + 0.2*game->player->dir.y;
+		tmp_pos.y = game->player->pos.y - 0.2*game->player->dir.x;
+	}
+	if (game->matrix[(int)tmp_pos.x][(int)(tmp_pos.y)] == '0')
+	{
+		game->player->pos.x = tmp_pos.x;
+		game->player->pos.y = tmp_pos.y;
 	}
 }
 
