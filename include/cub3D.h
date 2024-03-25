@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 15:32:16 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/21 22:14:02 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 # define WIN_WIDTH 	640
 # define WIN_HEIGHT 640
+# define PI 3.14159265
 # define WALL		'1'
 # define GROUND		'0'
 # define PL_NO      'N'

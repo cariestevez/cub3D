@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 15:32:34 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/21 23:06:17 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	validate_map(t_map *game)
 				|| game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W')
 			{
 				ft_populate_player(game, i, j, game->matrix[i][j]);
+				game->matrix[i][j] = '0';
 				n_player++;
 			}
 			else if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0'
