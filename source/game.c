@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/03/21 23:38:58 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/26 17:21:45 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,26 @@ t_vector	ft_fill_vector(double x, double y)
 void	ft_populate_player(t_map *game, int x, int y, char dir)
 {
 	game->player = ft_calloc(sizeof(t_player), 1);
-	game->player->pos = ft_fill_vector(x + 0.5, y + 0.5);
+	game->player->pos = ft_fill_vector(y + 0.5, x + 0.5);
 	if (dir == 'N')
 	{
-		game->player->dir = ft_fill_vector(-1, 0);
-		game->player->camera = ft_fill_vector(0, 0.66);
+		game->player->dir = ft_fill_vector(0, -1);
+		game->player->camera = ft_fill_vector(0.66, 0);
 	}
 	else if (dir == 'S')
 	{
-		game->player->dir = ft_fill_vector(1, 0);
-		game->player->camera = ft_fill_vector(0, -0.66);
+		game->player->dir = ft_fill_vector(0, 1);
+		game->player->camera = ft_fill_vector(-0.66, 0);
 	}
 	else if (dir == 'W')
 	{
-		game->player->dir = ft_fill_vector(0, 1);
-		game->player->camera = ft_fill_vector(0.66, 0);
+		game->player->dir = ft_fill_vector(-1, 0);
+		game->player->camera = ft_fill_vector(0, -0.66);
 	}
 	else if (dir == 'E')
 	{
-		game->player->dir = ft_fill_vector(0, -1);
-		game->player->camera = ft_fill_vector(-0.66, 0);
+		game->player->dir = ft_fill_vector(1, 0);
+		game->player->camera = ft_fill_vector(0, 0.66);
 	}
 }
 
@@ -74,12 +74,34 @@ int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
+uint32_t ft_get_pixel(mlx_image_t *image, double horizontal, double vertical)
+{
+	//95 is because the image is 96x96, if it's different size, needs to resize
+	int	x;
+	int	y;
+	uint32_t color;
+
+	color = 0;
+	if (horizontal >= 0)
+		x = (int) (95 * horizontal);
+	else
+		x = (int) (95 * (1.0 + horizontal));
+	y = (int) (95 * vertical);
+	//printf("In the wall, print value (%d, %d) from (%f, %f)\n", x, y, horizontal, vertical);
+	color += image->pixels[(y * 96 + x) * 4] << 24;
+	color += image->pixels[(y * 96 + x) * 4 + 1] << 16;
+	color += image->pixels[(y * 96 + x) * 4 + 2] << 8;
+	color += image->pixels[(y * 96 + x) * 4 + 3];
+	return (color);
+}
+
 void	ft_raycast(void *param)
 {
 	double	i;
 	t_map	*game;
 	t_vector	ray;
 	double		section;
+	uint32_t	hex_color;
 
 	game = (t_map *) param;
 	i = -1.0;
@@ -112,7 +134,7 @@ void	ft_raycast(void *param)
 		int stepX; //Are we walking in the positive or negative direction?
 		int	stepY;
 		int	hit = 0; //was there a wall hit?
-		int	side; //was a NS (1) or a EW (0) wall hit?
+		int	side; //was a NS (0) or a EW (1) wall hit?
 		double	sideDistX;
 		double sideDistY;
 		if (ray.x < 0)
@@ -152,22 +174,18 @@ void	ft_raycast(void *param)
 				side = 1;
 			}
 			//Check if ray has hit a wall
-			if (game->matrix[mapX][mapY] == '1')
-			{
-				//printf("Position (%d, %d) is a wall! In the code is %d\n", mapX, mapY, game->matrix[mapX][mapY]);
+			if (game->matrix[mapY][mapX] == '1')
 				hit = 1;
-			}
 		}
 		double WallDist; //How far is the wall based on the camera plane? No from player, as that would give us fisheye effect (round walls)
 		if(side == 0)
 			WallDist = (sideDistX - deltaDistX);
 		else
 			WallDist = (sideDistY - deltaDistY);
-		//printf("WallDist is %f\n", WallDist);
 		//Now we calculate how big the wall should be, inversely proportional to WallDist, using the height of the screen so when we are in front of a wall, it takes up all the space
 		int lineHeight;
-		if (WallDist == 0)
-			lineHeight = 600;
+		if (WallDist <= 0.001)
+			lineHeight = (int) (600 / 0.001);
 		else
 			lineHeight = (int)(600/ WallDist);
 		//calculate lowest and highest pixel to fill in current stripe: 0 is the center of the screen, so half the line should go negative and the other positive. If it's higher than the margins, stop at 0/highest margin
@@ -178,30 +196,30 @@ void	ft_raycast(void *param)
 		if(drawEnd >= 600)
 			drawEnd = 600 - 1;
 		int	j = drawStart;
+		//printf("For i=%d, x component is %f hits the wall at %f\n", (int) i, ray.x * WallDist, (ray.x * WallDist - ((int) (ray.x * WallDist)))*100);
 		while (j <= drawEnd)
 		{
-			if (side)
-				mlx_put_pixel(game->w_id, (int) i, j, ft_pixel(0xFF, 0x00, 0x00, 0xFF));
-			else
+			if (side && (int) mapY < (int) game->player->pos.y) //North
 			{
-				//printf("Side is good\n");
-				mlx_put_pixel(game->w_id, (int) i, j, ft_pixel(0x00, 0xFF, 0x00, 0xFF));
+				hex_color = ft_get_pixel(game->graphics->img_wall_N, (ray.x * WallDist + game->player->pos.x - ((int) (ray.x * WallDist + game->player->pos.x))), ((double)(((lineHeight - 600)/2) + j)) / ((double) (lineHeight)));
+				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
+			}
+			else if (side && (int) mapY > (int) game->player->pos.y) //South
+			{
+				hex_color = ft_get_pixel(game->graphics->img_wall_S, (ray.x * WallDist + game->player->pos.x - ((int) (ray.x * WallDist + game->player->pos.x))), ((double)(((lineHeight - 600)/2) + j)) / ((double) (lineHeight)));
+				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
+			}
+			else if (!side && (int) mapX > (int) game->player->pos.x) //East
+			{
+				hex_color = ft_get_pixel(game->graphics->img_wall_E, (ray.y * WallDist + game->player->pos.y - ((int) (ray.y * WallDist + game->player->pos.y))), ((double)(((lineHeight - 600)/2) + j)) / ((double) (lineHeight)));
+				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
+			}
+			else //West
+			{
+				hex_color = ft_get_pixel(game->graphics->img_wall_W, (ray.y * WallDist + game->player->pos.y - ((int) (ray.y * WallDist + game->player->pos.y))), ((double)(((lineHeight - 600)/2) + j)) / ((double) (lineHeight)));
+				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
 			}
 			j++;
-		}
-	}
-}
-
-void ft_randomize(void* param)
-{
-	t_map *game;
-
-	game = (t_map *)param;
-	for (uint32_t i = 0; i < game->w_id->width; ++i)
-	{
-		for (uint32_t y = 0; y < game->w_id->height; ++y)
-		{
-			mlx_put_pixel(game->w_id, i, y, ft_pixel(0xFF, 0x00, 0x00, 0x80));
 		}
 	}
 }
@@ -215,26 +233,44 @@ void	move_camera(t_map *game, char dir)
 	//90 degrees = PI/2
 	//180 degrees = PI
 	//270 degrees = 3*PI/2
-	if (game->player->dir.y >= 0 && game->player->dir.x <= 0)//If Y is positive but X negative, we are facing northwestish (0-90)
-		angle = acos(game->player->dir.y); //Angle between 0-90 degrees, so this is good
+	if (game->player->dir.y < 0 && game->player->dir.x >= 0)//If Y is positive but X negative, we are facing northwestish (0-90)
+		angle = acos(game->player->dir.x); //Angle between 0-90 degrees, so this is good
 	else if (game->player->dir.y >= 0 && game->player->dir.x >= 0)//We are facing southwestish (270-360)
-		angle = 2*PI - acos(game->player->dir.y);//acos gives us only the 0-180 degrees, so we need to adjust the angle
-	else if (game->player->dir.y < 0 && game->player->dir.x >= 0)//We are facing southeastish (180-270)
-		angle = 2*PI - acos(game->player->dir.y);//Again, we need to adjust the angle
+		angle = 2*PI - acos(game->player->dir.x);//acos gives us only the 0-180 degrees, so we need to adjust the angle
+	else if (game->player->dir.y >= 0 && game->player->dir.x < 0)//We are facing southeastish (180-270)
+		angle = 2*PI - acos(game->player->dir.x);//Again, we need to adjust the angle
 	else //We are facing norththeastish (90-180)
-		angle = acos(game->player->dir.y); //acos works again
+		angle = acos(game->player->dir.x); //acos works again
 	if (dir == 'L')
-		angle -= PI/36;
-	else if (dir == 'R')
 		angle += PI/36;
+	else if (dir == 'R')
+		angle -= PI/36;
 	if (angle >= 2*PI)
 		angle -= 2*PI;
 	else if (angle < 0)
 		angle += 2*PI;
-	game->player->dir.x = -sin(angle);
-	game->player->dir.y = cos(angle);
-	game->player->camera.x = -sin(angle + PI/2)*0.66;
-	game->player->camera.y = cos(angle + PI/2)*0.66;
+	game->player->dir.x = cos(angle);
+	game->player->dir.y = -sin(angle);
+	game->player->camera.x = cos(angle - PI/2)*0.66;
+	game->player->camera.y = -sin(angle - PI/2)*0.66;
+}
+
+int ft_wall_dist(t_map *game, t_vector tmp_pos)
+{
+	int	x;
+	int	y;
+
+	x = (int) tmp_pos.x;
+	y = (int) tmp_pos.y;
+	if (game->matrix[y + 1][x] == '1' && tmp_pos.y - y > 0.95)
+		return (0);
+	else if (game->matrix[y - 1][x] == '1' && tmp_pos.y - y < 0.05)
+		return (0);
+	else if (game->matrix[y][x + 1] == '1' && tmp_pos.x - x > 0.95)
+		return (0);
+	else if (game->matrix[y][x - 1] == '1' && tmp_pos.x - x < 0.05)
+		return (0);
+	return (1);
 }
 
 void	move_player(t_map *game, char dir)
@@ -260,7 +296,8 @@ void	move_player(t_map *game, char dir)
 		tmp_pos.x = game->player->pos.x + 0.2*game->player->dir.y;
 		tmp_pos.y = game->player->pos.y - 0.2*game->player->dir.x;
 	}
-	if (game->matrix[(int)tmp_pos.x][(int)(tmp_pos.y)] == '0')
+	if (game->matrix[(int)tmp_pos.y][(int)(tmp_pos.x)] == '0'
+		&& ft_wall_dist(game, tmp_pos))
 	{
 		game->player->pos.x = tmp_pos.x;
 		game->player->pos.y = tmp_pos.y;
