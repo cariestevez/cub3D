@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/04/01 19:04:57 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:09:01 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,6 @@ uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical)
 	color += image->pixels[(y * 96 + x) * 4 + 3];
 	return (color);
 }
-
-typedef struct s_raycast
-{
-	t_vector	ray;
-	t_vector	d_dist;
-	t_vector	s_dist;
-	double		section;
-	int			mapx;
-	int			mapy;
-	int			stepx;
-	int			stepy;
-	int			hit;
-	int			side;
-	double		walldist;
-	int			lineheight;
-	int			drawstart;
-	int			drawend;
-}	t_raycast;
 
 void	ft_raycast(void *param)
 {
