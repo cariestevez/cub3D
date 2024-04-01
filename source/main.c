@@ -6,11 +6,38 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 17:56:30 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:48:52 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
+
+void	ft_terminate(t_map *game)
+{
+	free(game->player);
+	game->player = NULL;
+	free(game->w_id);
+	game->w_id = NULL;
+	mlx_terminate(game->id);
+	game->id = NULL;
+	free_struct(game);
+}
+
+int	ft_initgame(t_map *game)
+{
+	printf("Here\n");
+	game->id = mlx_init(WIN_WIDTH, WIN_HEIGHT, "xoxo", true);
+	if (game->id == NULL)
+		return (ft_mlxerror(game), EXIT_FAILURE);
+	if (create_images(game, game->graphics))
+		return (mlx_close_window(game->id), EXIT_FAILURE);
+	game->w_id = mlx_new_image(game->id, WIN_WIDTH, WIN_HEIGHT);
+	mlx_image_to_window(game->id, game->w_id, 0, 0);
+	mlx_key_hook(game->id, ft_my_keys, game);
+	mlx_loop_hook(game->id, ft_raycast, game);
+	mlx_loop(game->id);
+	return (0);
+}
 
 int	args_check(int argc, char **argv)
 {
@@ -28,22 +55,6 @@ int	args_check(int argc, char **argv)
 		ft_printf("Invalid file extension! File must have .cub extension.\n");
 		return (EXIT_FAILURE);
 	}
-	return (0);
-}
-
-int	ft_initgame(t_map *game)
-{
-	printf("Here\n");
-	game->id = mlx_init(WIN_WIDTH, WIN_HEIGHT, "xoxo", true);
-	if (game->id == NULL)
-		return (ft_mlxerror(game), EXIT_FAILURE);
-	if (create_images(game, game->graphics))
-		return (mlx_close_window(game->id), EXIT_FAILURE);
-	game->w_id = mlx_new_image(game->id, WIN_WIDTH, WIN_HEIGHT);
-	mlx_image_to_window(game->id, game->w_id, 0, 0);
-	mlx_key_hook(game->id, ft_my_keys, game);
-	mlx_loop_hook(game->id, ft_raycast, game);
-	mlx_loop(game->id);
 	return (0);
 }
 

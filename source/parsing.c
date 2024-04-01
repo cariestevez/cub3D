@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:43:35 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/20 23:42:37 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:05:12 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,20 @@ int	parse_textures(int fd, t_map *game, char **line)
 	if (ft_strlen(*line) == 0)
 		return (printf("Error\nFile is empty!\n"), 1);
 	while (ft_strlen(*line) && (!game->graphics->ceiling
-			|| !game->graphics->ground || !game->graphics->path_wall_N
-			|| !game->graphics->path_wall_S || !game->graphics->path_wall_E
-			|| !game->graphics->path_wall_W))
+			|| !game->graphics->ground || !game->graphics->path_wall_n
+			|| !game->graphics->path_wall_s || !game->graphics->path_wall_e
+			|| !game->graphics->path_wall_w))
 	{
 		*line = ft_strtrim(*line, "\n");
 		if (ft_strlen(*line) == 0)
 		{
-			free(*line);
-			*line = get_next_line(fd);
+			ft_read(line, fd);
 			continue ;
 		}
 		token = ft_split(*line, ' ');
-		if (!token)
+		if (!token || save_textures(token, game))
 			return (free_gnl_buff(fd, *line), 1);
-		if (save_textures(token, game))
-			return (free_gnl_buff(fd, *line), 1);
-		free(*line);
-		*line = get_next_line(fd);
+		ft_read(line, fd);
 	}
 	if (ft_strlen(*line) == 0)
 		return (printf("Error\nInvalid file format\n"), 1);
