@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/04/01 16:40:22 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:52:07 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,7 @@ void	ft_raycast(void *param)
 
 	game = (t_map *) param;
 	i = -1.0;
-	int	k = -1;
-	int	l;
-	while (++k < 960)
-	{
-		l = -1;
-		//while (++l < 600)
-		//	mlx_put_pixel(game->w_id, k, l, ft_pixel(0x00, 0x00, 0x00, 0xFF));
-	}
+	render_floor_ceiling(game);
 	while (++i < 960) //For each (vertical column of) pixel in the screen
 	{
 		section = (2*i/959) - 1; //(959 because of 0), this will select each column
@@ -256,7 +249,9 @@ void	move_player(t_map *game, char dir)
 		tmp.x = game->player->pos.x + 0.2 * game->player->dir.y;
 		tmp.y = game->player->pos.y - 0.2 * game->player->dir.x;
 	}
-	if (t_wall_dist(game, tmp))
+	else
+		tmp = ft_fill_vector(game->player->pos.x, game->player->pos.y);
+	if (ft_wall_dist(game, tmp))
 	{
 		game->player->pos.x = tmp.x;
 		game->player->pos.y = tmp.y;
