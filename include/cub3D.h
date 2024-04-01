@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 19:04:05 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:08:57 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,24 @@ typedef struct s_map
 	mlx_image_t		*w_id;
 	mlx_t			*id;
 }	t_map;
+
+typedef struct s_raycast
+{
+	t_vector	ray;
+	t_vector	d_dist;
+	t_vector	s_dist;
+	double		section;
+	int			mapx;
+	int			mapy;
+	int			stepx;
+	int			stepy;
+	int			hit;
+	int			side;
+	double		walldist;
+	int			lineheight;
+	int			drawstart;
+	int			drawend;
+}	t_raycast;
 
 //main.c
 void		ft_terminate(t_map *game);
