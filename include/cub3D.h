@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 17:46:23 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:29:26 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int			save_rgb(char **rgb_char, char c, t_map *game);
 int			validate_rgb(char c, char *raw_rgb, t_map *game);
 int			save_textures(char **token, t_map *game);
 int			validate_map(t_map *game);
+int			inspect_map(t_map *game, int i, int j, int *n_player);
 
 //utils.c
 int			is_empty_line(char *line);

@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 18:22:56 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:29:02 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	validate_map(t_map *game)
 		j = -1;
 		while (game->matrix[i][++j] != '\0')
 		{
-			if (inspect_map(game, &n_player))
+			if (inspect_map(game, i, j, &n_player))
 				return (1);
 		}
 	}
