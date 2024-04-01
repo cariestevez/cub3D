@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/03/26 17:21:45 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/03/27 16:39:14 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 void	ft_fake_game(t_map *game)
 {
 	char	**arr;
+	int		i;
 
 	arr = ft_calloc(12, sizeof(char *));
-	int i = -1;
+	i = -1;
 	while (++i < 11)
 		arr[i] = ft_calloc(sizeof(char), 11);
 	arr[0] = "1111111111";
@@ -69,21 +70,20 @@ void	ft_populate_player(t_map *game, int x, int y, char dir)
 	}
 }
 
-int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
+int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
-uint32_t ft_get_pixel(mlx_image_t *image, double horizontal, double vertical)
+uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical)
 {
-	//95 is because the image is 96x96, if it's different size, needs to resize
-	int	x;
-	int	y;
-	uint32_t color;
+	int			x;
+	int			y;
+	uint32_t	color;
 
 	color = 0;
 	if (horizontal >= 0)
-		x = (int) (95 * horizontal);
+		x = (int) (95 * horizontal); //95 is because the image is 96x96
 	else
 		x = (int) (95 * (1.0 + horizontal));
 	y = (int) (95 * vertical);
@@ -123,12 +123,12 @@ void	ft_raycast(void *param)
 		//Now we need to find how far away is the wall. This has two components, the sideDist (distance from current position until first border) and deltaDist (distance from first border to the next)
 		double deltaDistX; //Find out the distance the ray needs to travel so it finds the next wall. If ray x or y is 0, divide by 1e30 to avoid division by 0
 		if (ray.x == 0)
-			deltaDistX = fabs(1/1e30);
+			deltaDistX = fabs(1/1e-30);
 		else
 			deltaDistX = fabs(1/ray.x);
 		double deltaDistY;
 		if (ray.y == 0)
-			deltaDistY = fabs(1/1e30);
+			deltaDistY = fabs(1/1e-30);
 		else
 			deltaDistY = fabs(1/ray.y);
 		int stepX; //Are we walking in the positive or negative direction?
@@ -242,26 +242,28 @@ void	move_camera(t_map *game, char dir)
 	else //We are facing norththeastish (90-180)
 		angle = acos(game->player->dir.x); //acos works again
 	if (dir == 'L')
-		angle += PI/36;
+		angle += PI / 36;
 	else if (dir == 'R')
-		angle -= PI/36;
-	if (angle >= 2*PI)
-		angle -= 2*PI;
+		angle -= PI / 36;
+	if (angle >= 2 * PI)
+		angle -= 2 * PI;
 	else if (angle < 0)
-		angle += 2*PI;
+		angle += 2 * PI;
 	game->player->dir.x = cos(angle);
 	game->player->dir.y = -sin(angle);
-	game->player->camera.x = cos(angle - PI/2)*0.66;
-	game->player->camera.y = -sin(angle - PI/2)*0.66;
+	game->player->camera.x = cos(angle - PI / 2) * 0.66;
+	game->player->camera.y = -sin(angle - PI / 2) * 0.66;
 }
 
-int ft_wall_dist(t_map *game, t_vector tmp_pos)
+int	ft_wall_dist(t_map *game, t_vector tmp_pos)
 {
 	int	x;
 	int	y;
 
 	x = (int) tmp_pos.x;
 	y = (int) tmp_pos.y;
+	if (game->matrix[y][x] == '1')
+		return (0);
 	if (game->matrix[y + 1][x] == '1' && tmp_pos.y - y > 0.95)
 		return (0);
 	else if (game->matrix[y - 1][x] == '1' && tmp_pos.y - y < 0.05)
@@ -275,38 +277,36 @@ int ft_wall_dist(t_map *game, t_vector tmp_pos)
 
 void	move_player(t_map *game, char dir)
 {
-	t_vector tmp_pos;
+	t_vector	tmp;
+
 	if (dir == 'N')
-	{
-		tmp_pos.x = game->player->pos.x + 0.2*game->player->dir.x;
-		tmp_pos.y = game->player->pos.y + 0.2*game->player->dir.y;
-	}
+		tmp = ft_fill_vector(game->player->pos.x + 0.2 * game->player->dir.x,
+				game->player->pos.y + 0.2 * game->player->dir.y);
 	else if (dir == 'S')
 	{
-		tmp_pos.x = game->player->pos.x - 0.2*game->player->dir.x;
-		tmp_pos.y = game->player->pos.y - 0.2*game->player->dir.y;
+		tmp.x = game->player->pos.x - 0.2 * game->player->dir.x;
+		tmp.y = game->player->pos.y - 0.2 * game->player->dir.y;
 	}
 	else if (dir == 'E')
 	{
-		tmp_pos.x = game->player->pos.x - 0.2*game->player->dir.y;
-		tmp_pos.y = game->player->pos.y + 0.2*game->player->dir.x;
+		tmp.x = game->player->pos.x - 0.2 * game->player->dir.y;
+		tmp.y = game->player->pos.y + 0.2 * game->player->dir.x;
 	}
 	else if (dir == 'W')
 	{
-		tmp_pos.x = game->player->pos.x + 0.2*game->player->dir.y;
-		tmp_pos.y = game->player->pos.y - 0.2*game->player->dir.x;
+		tmp.x = game->player->pos.x + 0.2 * game->player->dir.y;
+		tmp.y = game->player->pos.y - 0.2 * game->player->dir.x;
 	}
-	if (game->matrix[(int)tmp_pos.y][(int)(tmp_pos.x)] == '0'
-		&& ft_wall_dist(game, tmp_pos))
+	if (t_wall_dist(game, tmp))
 	{
-		game->player->pos.x = tmp_pos.x;
-		game->player->pos.y = tmp_pos.y;
+		game->player->pos.x = tmp.x;
+		game->player->pos.y = tmp.y;
 	}
 }
 
 void	ft_my_keys(mlx_key_data_t keydata, void *param)
 {
-	t_map *game;
+	t_map	*game;
 
 	game = (t_map *)param;
 	if (keydata.key == MLX_KEY_ESCAPE)
@@ -327,11 +327,7 @@ void	ft_my_keys(mlx_key_data_t keydata, void *param)
 
 int	ft_initgame(t_map *game)
 {
-	//game->id = mlx_init(960, 600, "Walking simulator", true);
-	// if (!game->id)
-	// 	ft_mlxerror(game);
 	game->w_id = mlx_new_image(game->id, 960, 600);
-	//ft_raycast((void *) game);
 	mlx_image_to_window(game->id, game->w_id, 0, 0);
 	mlx_key_hook(game->id, ft_my_keys, game);
 	mlx_loop_hook(game->id, ft_raycast, game);
