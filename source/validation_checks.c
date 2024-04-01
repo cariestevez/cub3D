@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 18:05:02 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:22:56 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,34 +38,39 @@ int	is_closed(t_map *game)
 	return (0);
 }
 
+int	inspect_map(t_map *game, int i, int j, int *n_player)
+{
+	if (game->matrix[i][j] == 'N' || game->matrix[i][j] == 'S'
+		|| game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W')
+	{
+		ft_populate_player(game, i, j, game->matrix[i][j]);
+		game->matrix[i][j] = '0';
+		(*n_player)++;
+	}
+	else if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0'
+		|| game->matrix[i][j] == ' '))
+		return (printf("Error\nInvalid char when map expected\n"), 1);
+	return (0);
+}
+
 int	validate_map(t_map *game)
 {
 	int	i;
 	int	j;
 	int	n_player;
 
-	i = 0;
+	i = -1;
 	n_player = 0;
 	if (!game->matrix)
 		return (printf("Error\nMissing map in file\n"), 1);
-	while (game->matrix[i] != NULL)
+	while (game->matrix[++i] != NULL)
 	{
-		j = 0;
-		while (game->matrix[i][j] != '\0')
+		j = -1;
+		while (game->matrix[i][++j] != '\0')
 		{
-			if (game->matrix[i][j] == 'N' || game->matrix[i][j] == 'S'
-				|| game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W')
-			{
-				ft_populate_player(game, i, j, game->matrix[i][j]);
-				game->matrix[i][j] = '0';
-				n_player++;
-			}
-			else if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0'
-				|| game->matrix[i][j] == ' '))
-				return (printf("Error\nInvalid char when map expected\n"), 1);
-			j++;
+			if (inspect_map(game, &n_player))
+				return (1);
 		}
-		i++;
 	}
 	if (i < 2 || j < 2)
 		return (printf("Error\nMap too small\n"), 1);
