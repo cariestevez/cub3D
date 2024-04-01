@@ -4,8 +4,8 @@ LIBMLX		:= ./MLX42
 LIBFT		:= ./libft
 
 HEADERS	:= -I ./include -I $(LIBMLX)/include -I $(LIBFT)
-LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -L/opt/homebrew/lib -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
-#LIBS	:= -L$(LIBFT) -L$(LIBMLX)/build -lft -ldl -lglfw -pthread -lm -lmlx42
+#LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -L/opt/homebrew/lib -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
+LIBS	:= -L$(LIBFT) -L$(LIBMLX)/build -lft -ldl -lglfw -pthread -lm -lmlx42
 
 SRCS	:=	source/main.c \
 			source/init.c \
