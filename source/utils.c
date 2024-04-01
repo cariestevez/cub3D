@@ -6,16 +6,16 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:42:28 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 18:01:17 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:03:55 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	ft_mlxerror(t_map *game)
+void	ft_read(char **line, int fd)
 {
-	printf("%s\n", mlx_strerror(mlx_errno));
-	free_struct(game);
+	free(*line);
+	*line = get_next_line(fd);
 }
 
 int	is_empty_line(char *line)
@@ -67,4 +67,19 @@ void	ft_populate_player(t_map *game, int x, int y, char dir)
 		game->player->dir = ft_fill_vector(1, 0);
 		game->player->camera = ft_fill_vector(0, 0.66);
 	}
+}
+
+int	inspect_map(t_map *game, int i, int j, int *n_player)
+{
+	if (game->matrix[i][j] == 'N' || game->matrix[i][j] == 'S'
+		|| game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W')
+	{
+		ft_populate_player(game, i, j, game->matrix[i][j]);
+		game->matrix[i][j] = '0';
+		(*n_player)++;
+	}
+	else if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0'
+		|| game->matrix[i][j] == ' '))
+		return (printf("Error\nInvalid char when map expected\n"), 1);
+	return (0);
 }

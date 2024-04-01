@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 23:29:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 17:42:44 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:01:41 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ t_graphics	*init_graphics(t_map *g)
 		return (NULL);
 	g->graphics->ceiling = 0;
 	g->graphics->ground = 0;
-	g->graphics->path_wall_N = NULL;
-	g->graphics->path_wall_S = NULL;
-	g->graphics->path_wall_E = NULL;
-	g->graphics->path_wall_W = NULL;
-	g->graphics->txtr_wall_N = NULL;
-	g->graphics->txtr_wall_S = NULL;
-	g->graphics->txtr_wall_E = NULL;
-	g->graphics->txtr_wall_W = NULL;
-	g->graphics->img_wall_N = NULL;
-	g->graphics->img_wall_S = NULL;
-	g->graphics->img_wall_E = NULL;
-	g->graphics->img_wall_W = NULL;
+	g->graphics->path_wall_n = NULL;
+	g->graphics->path_wall_s = NULL;
+	g->graphics->path_wall_e = NULL;
+	g->graphics->path_wall_w = NULL;
+	g->graphics->txtr_wall_n = NULL;
+	g->graphics->txtr_wall_s = NULL;
+	g->graphics->txtr_wall_e = NULL;
+	g->graphics->txtr_wall_w = NULL;
+	g->graphics->img_wall_n = NULL;
+	g->graphics->img_wall_s = NULL;
+	g->graphics->img_wall_e = NULL;
+	g->graphics->img_wall_w = NULL;
 	return (g->graphics);
 }
