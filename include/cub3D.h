@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 18:29:26 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:04:05 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@
 
 # define WIN_WIDTH 	960
 # define WIN_HEIGHT 600
-# define PI 3.14159265
-# define BPP sizeof(int32_t)
+# define PI			3.14159265
 # define CEILING	'C'
 # define FLOOR		'F'
 # define WALL		'1'
@@ -37,7 +36,6 @@
 # define PL_SO		'S'
 # define PL_EA      'E'
 # define PL_WE		'W'
-
 
 typedef struct s_vector
 {
@@ -56,18 +54,18 @@ typedef struct s_graphics
 {
 	unsigned long	ceiling;
 	unsigned long	ground;
-	char			*path_wall_N;
-	char			*path_wall_S;
-	char			*path_wall_E;
-	char			*path_wall_W;
-	mlx_texture_t	*txtr_wall_N;
-	mlx_texture_t	*txtr_wall_S;
-	mlx_texture_t	*txtr_wall_E;
-	mlx_texture_t	*txtr_wall_W;
-	mlx_image_t		*img_wall_N;
-	mlx_image_t		*img_wall_S;
-	mlx_image_t		*img_wall_E;
-	mlx_image_t		*img_wall_W;
+	char			*path_wall_n;
+	char			*path_wall_s;
+	char			*path_wall_e;
+	char			*path_wall_w;
+	mlx_texture_t	*txtr_wall_n;
+	mlx_texture_t	*txtr_wall_s;
+	mlx_texture_t	*txtr_wall_e;
+	mlx_texture_t	*txtr_wall_w;
+	mlx_image_t		*img_wall_n;
+	mlx_image_t		*img_wall_s;
+	mlx_image_t		*img_wall_e;
+	mlx_image_t		*img_wall_w;
 }	t_graphics;
 
 typedef struct s_map
@@ -75,13 +73,14 @@ typedef struct s_map
 	char			**matrix;
 	t_graphics		*graphics;
 	t_player		*player;
-	mlx_image_t		 *w_id;
+	mlx_image_t		*w_id;
 	mlx_t			*id;
 }	t_map;
 
 //main.c
-int			args_check(int argc, char **argv);
+void		ft_terminate(t_map *game);
 int			ft_initgame(t_map *game);
+int			args_check(int argc, char **argv);
 
 //init.c
 t_map		*init_struct(void);
@@ -92,39 +91,39 @@ void		free_gnl_buff(int fd, char *line);
 void		free_array(char **arr);
 void		free_graphics(t_graphics *graphic);
 void		free_struct(t_map *game);
-void		ft_terminate(t_map *game);
+void		ft_mlxerror(t_map *game);
 
 //parsing.c
-int			save_map_line(char *line, t_map *game);
 int			parse_rgb(t_map *game, char **token);
-int			parse_map(int fd, t_map *game, char **line);
 int			parse_textures(int fd, t_map *game, char **line);
-int 		parsing(char *map_file, t_map *game);
+int			save_map_line(char *line, t_map *game);
+int			parse_map(int fd, t_map *game, char **line);
+int			parsing(char *map_file, t_map *game);
 
 //validation_checks.c
 int			is_closed(t_map *game);
+int			validate_map(t_map *game);
+int			save_textures(char **token, t_map *game);
 int			save_rgb(char **rgb_char, char c, t_map *game);
 int			validate_rgb(char c, char *raw_rgb, t_map *game);
-int			save_textures(char **token, t_map *game);
-int			validate_map(t_map *game);
-int			inspect_map(t_map *game, int i, int j, int *n_player);
 
 //utils.c
+void		ft_read(char **line, int fd);
 int			is_empty_line(char *line);
-void		ft_mlxerror(t_map *game);
 t_vector	ft_fill_vector(double x, double y);
 void		ft_populate_player(t_map *game, int x, int y, char dir);
+int			inspect_map(t_map *game, int i, int j, int *n_player);
 
 //rendering.c
 void		render_floor_ceiling(t_map *game);
-int			create_images(t_map *game, t_graphics *graphics);
 void		ft_put_pixel(mlx_image_t *image, int x, int y, uint32_t color);
+int			create_images(t_map *game, t_graphics *graphics);
 
 //game.c
-uint32_t 	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical);
+uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical);
 void		ft_raycast(void *param);
 void		move_camera(t_map *game, char dir);
-int 		ft_wall_dist(t_map *game, t_vector tmp_pos);
+int			ft_wall_dist(t_map *game, t_vector tmp_pos);
 void		move_player(t_map *game, char dir);
 void		ft_my_keys(mlx_key_data_t keydata, void *param);
 #endif

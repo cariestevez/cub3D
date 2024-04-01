@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 18:29:02 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:03:39 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,6 @@ int	is_closed(t_map *game)
 				return (1);
 		}
 	}
-	return (0);
-}
-
-int	inspect_map(t_map *game, int i, int j, int *n_player)
-{
-	if (game->matrix[i][j] == 'N' || game->matrix[i][j] == 'S'
-		|| game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W')
-	{
-		ft_populate_player(game, i, j, game->matrix[i][j]);
-		game->matrix[i][j] = '0';
-		(*n_player)++;
-	}
-	else if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0'
-		|| game->matrix[i][j] == ' '))
-		return (printf("Error\nInvalid char when map expected\n"), 1);
 	return (0);
 }
 
@@ -87,14 +72,14 @@ int	save_textures(char **token, t_map *game)
 		return (0);
 	if (token[2])
 		return (printf("Error\nToo many words in line\n"), 1);
-	if (!game->graphics->path_wall_N && ft_strncmp(token[0], "NO", 3) == 0)
-		game->graphics->path_wall_N = ft_strdup(token[1]);
-	else if (!game->graphics->path_wall_S && ft_strncmp(token[0], "SO", 3) == 0)
-		game->graphics->path_wall_S = ft_strdup(token[1]);
-	else if (!game->graphics->path_wall_E && ft_strncmp(token[0], "EA", 3) == 0)
-		game->graphics->path_wall_E = ft_strdup(token[1]);
-	else if (!game->graphics->path_wall_W && ft_strncmp(token[0], "WE", 3) == 0)
-		game->graphics->path_wall_W = ft_strdup(token[1]);
+	if (!game->graphics->path_wall_n && ft_strncmp(token[0], "NO", 3) == 0)
+		game->graphics->path_wall_n = ft_strdup(token[1]);
+	else if (!game->graphics->path_wall_s && ft_strncmp(token[0], "SO", 3) == 0)
+		game->graphics->path_wall_s = ft_strdup(token[1]);
+	else if (!game->graphics->path_wall_e && ft_strncmp(token[0], "EA", 3) == 0)
+		game->graphics->path_wall_e = ft_strdup(token[1]);
+	else if (!game->graphics->path_wall_w && ft_strncmp(token[0], "WE", 3) == 0)
+		game->graphics->path_wall_w = ft_strdup(token[1]);
 	else if (parse_rgb(game, token))
 		return (free_array(token), 1);
 	return (free_array(token), 0);
