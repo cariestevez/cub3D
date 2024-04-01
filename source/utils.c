@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:42:28 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 15:54:32 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:01:17 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,3 @@ void	ft_populate_player(t_map *game, int x, int y, char dir)
 		game->player->camera = ft_fill_vector(0, 0.66);
 	}
 }
-
-// int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
-// {
-// 	return (r << 24 | g << 16 | b << 8 | a);
-// }
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validation_checks.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 15:58:30 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:05:02 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,16 +107,14 @@ int	save_rgb(char **rgb_char, char c, t_map *game)
 	while (rgb_char && rgb_char[++i])
 	{
 		raw_color = ft_atoi(rgb_char[i]);
-		printf("int color[%d]: %d\n", i, raw_color);
 		if (!(raw_color >= 0 && raw_color <= 255))
 			return (printf("Error\nInvalid RGB color format\n"), 1);
-		if (i == 0)//red
+		if (i == 0)
 			hex_color += (raw_color & 0xff) << 24;
-		else if (i == 1)//green
+		else if (i == 1)
 			hex_color += (raw_color & 0xff) << 16;
-		else if (i == 2)//blue
+		else if (i == 2)
 			hex_color += (raw_color & 0xff) << 8;
-		printf("hex color[%d]: %x\n", i, hex_color);
 	}
 	if (c == CEILING)
 		game->graphics->ceiling = hex_color;
