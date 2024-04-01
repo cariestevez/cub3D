@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:42:28 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/25 23:59:10 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:12:25 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ int	is_empty_line(char *line)
 	return (1);
 }
 
-void	ft_populate_player(t_map *game, int x, int y, char c)
-{
-	game->player = ft_calloc(sizeof(t_player), 1);
-	game->player->pos = ft_fill_vector(2, 8);//(x, y)
-	//if (c == 'N') else if (c == 'S') else if (c == 'E') else
-	game->player->dir = ft_fill_vector(0, -1);
-	game->player->camera = ft_fill_vector(0.66, 0);
-}
+// void	ft_populate_player(t_map *game, int x, int y, char c)
+// {
+// 	game->player = ft_calloc(sizeof(t_player), 1);
+// 	game->player->pos = ft_fill_vector(2, 8);//(x, y)
+// 	//if (c == 'N') else if (c == 'S') else if (c == 'E') else
+// 	game->player->dir = ft_fill_vector(0, -1);
+// 	game->player->camera = ft_fill_vector(0.66, 0);
+// }
 
 t_vector	ft_fill_vector(double x, double y)
 {
