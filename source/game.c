@@ -6,74 +6,33 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/03/27 16:39:14 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:40:22 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-void	ft_fake_game(t_map *game)
-{
-	char	**arr;
-	int		i;
+// void	ft_fake_game(t_map *game)
+// {
+// 	char	**arr;
 
-	arr = ft_calloc(12, sizeof(char *));
-	i = -1;
-	while (++i < 11)
-		arr[i] = ft_calloc(sizeof(char), 11);
-	arr[0] = "1111111111";
-	arr[1] = "1000000001";
-	arr[2] = "1000000001";
-	arr[3] = "1000000001";
-	arr[4] = "1000000001";
-	arr[5] = "1000000001";
-	arr[6] = "1000000001";
-	arr[7] = "1000000001";
-	arr[8] = "1000000001";
-	arr[9] = "1111111111";
-	arr[10] = 0;
-	game->matrix = arr;
-}
-
-t_vector	ft_fill_vector(double x, double y)
-{
-	t_vector	vector;
-
-	vector.x = x;
-	vector.y = y;
-	return (vector);
-}
-
-void	ft_populate_player(t_map *game, int x, int y, char dir)
-{
-	game->player = ft_calloc(sizeof(t_player), 1);
-	game->player->pos = ft_fill_vector(y + 0.5, x + 0.5);
-	if (dir == 'N')
-	{
-		game->player->dir = ft_fill_vector(0, -1);
-		game->player->camera = ft_fill_vector(0.66, 0);
-	}
-	else if (dir == 'S')
-	{
-		game->player->dir = ft_fill_vector(0, 1);
-		game->player->camera = ft_fill_vector(-0.66, 0);
-	}
-	else if (dir == 'W')
-	{
-		game->player->dir = ft_fill_vector(-1, 0);
-		game->player->camera = ft_fill_vector(0, -0.66);
-	}
-	else if (dir == 'E')
-	{
-		game->player->dir = ft_fill_vector(1, 0);
-		game->player->camera = ft_fill_vector(0, 0.66);
-	}
-}
-
-int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
-{
-	return (r << 24 | g << 16 | b << 8 | a);
-}
+// 	arr = ft_calloc(12, sizeof(char *));
+// 	int i = -1;
+// 	while (++i < 11)
+// 		arr[i] = ft_calloc(sizeof(char), 11);
+// 	arr[0] = "1111111111";
+// 	arr[1] = "1000000001";
+// 	arr[2] = "1000000001";
+// 	arr[3] = "1000000001";
+// 	arr[4] = "1000000001";
+// 	arr[5] = "1000000001";
+// 	arr[6] = "1000000001";
+// 	arr[7] = "1000000001";
+// 	arr[8] = "1000000001";
+// 	arr[9] = "1111111111";
+// 	arr[10] = 0;
+// 	game->matrix = arr;
+// }
 
 uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical)
 {
@@ -110,8 +69,8 @@ void	ft_raycast(void *param)
 	while (++k < 960)
 	{
 		l = -1;
-		while (++l < 600)
-			mlx_put_pixel(game->w_id, k, l, ft_pixel(0x00, 0x00, 0x00, 0xFF));
+		//while (++l < 600)
+		//	mlx_put_pixel(game->w_id, k, l, ft_pixel(0x00, 0x00, 0x00, 0xFF));
 	}
 	while (++i < 960) //For each (vertical column of) pixel in the screen
 	{
@@ -323,14 +282,4 @@ void	ft_my_keys(mlx_key_data_t keydata, void *param)
 		move_player(game, 'E');
 	else if (keydata.key == MLX_KEY_W)
 		move_player(game, 'N');
-}
-
-int	ft_initgame(t_map *game)
-{
-	game->w_id = mlx_new_image(game->id, 960, 600);
-	mlx_image_to_window(game->id, game->w_id, 0, 0);
-	mlx_key_hook(game->id, ft_my_keys, game);
-	mlx_loop_hook(game->id, ft_raycast, game);
-	mlx_loop(game->id);
-	return (0);
 }

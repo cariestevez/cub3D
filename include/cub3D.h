@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 22:14:02 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 15:58:32 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,12 @@
 # include <errno.h>
 # include <math.h>
 
-# define WIN_WIDTH 	640
-# define WIN_HEIGHT 640
+# define WIN_WIDTH 	960
+# define WIN_HEIGHT 600
 # define PI 3.14159265
+# define BPP sizeof(int32_t)
+# define CEILING	'C'
+# define FLOOR		'F'
 # define WALL		'1'
 # define GROUND		'0'
 # define PL_NO      'N'
@@ -78,6 +81,7 @@ typedef struct s_map
 
 //main.c
 int			args_check(int argc, char **argv);
+int			ft_initgame(t_map *game);
 
 //init.c
 t_map		*init_struct(void);
@@ -107,10 +111,20 @@ int			validate_map(t_map *game);
 //utils.c
 int			is_empty_line(char *line);
 void		ft_mlxerror(t_map *game);
+t_vector	ft_fill_vector(double x, double y);
+void		ft_populate_player(t_map *game, int x, int y, char dir);
+
+//rendering.c
+void		render_floor_ceiling(t_map *game);
 int			create_images(t_map *game, t_graphics *graphics);
+void		putpixel(int x, int y, int color);
+void		ft_put_pixel(mlx_image_t *image, int x, int y, uint32_t color);
 
 //game.c
-int			ft_initgame(t_map *game);
-void	ft_populate_player(t_map *game, int x, int y, char dir);
-
+uint32_t 	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical);
+void		ft_raycast(void *param);
+void		move_camera(t_map *game, char dir);
+int 		ft_wall_dist(t_map *game, t_vector tmp_pos);
+void		move_player(t_map *game, char dir);
+void		ft_my_keys(mlx_key_data_t keydata, void *param);
 #endif
