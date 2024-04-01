@@ -6,20 +6,36 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:40:25 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 17:41:14 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:50:08 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-// void	render_floor_ceiling(game)
-// {
-    
-// }
+void	render_floor_ceiling(t_map *game)
+{
+	int	x;
+	int y;
+
+	y = 0;
+	while (y <= WIN_HEIGHT)
+	{
+		x = 0;
+		while (x <= WIN_WIDTH)
+		{
+			if (y < WIN_HEIGHT / 2)
+				ft_put_pixel(game->w_id, x, y, game->graphics->ceiling);
+			else
+				ft_put_pixel(game->w_id, x, y, game->graphics->ground);
+			x++;
+		}
+		y++;
+	}	
+}
 
 //This function will get the coordinates (x, y) in the image "image" that we want to paint with our color "color"
 //Color is in the form of 0xRRGGBB
-void	ft_put_pixel(mlx_image_t *image, int x, int y, unsigned long color)
+void		ft_put_pixel(mlx_image_t *image, int x, int y, uint32_t color)
 {
 	color = (uint32_t)color;
 	
