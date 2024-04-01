@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/03/21 14:50:39 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 16:14:49 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,23 @@ int	args_check(int argc, char **argv)
 	return (0);
 }
 
+int	ft_initgame(t_map *game)
+{
+	printf("Here\n");
+	game->id = mlx_init(WIN_WIDTH, WIN_HEIGHT, "xoxo", true);
+	if (game->id == NULL)
+		return (ft_mlxerror(game), EXIT_FAILURE);
+	if (create_images(game, game->graphics))
+		return (ft_terminate(game), EXIT_FAILURE);
+	game->w_id = mlx_new_image(game->id, WIN_WIDTH, WIN_HEIGHT);
+	render_floor_ceiling(game);
+	mlx_image_to_window(game->id, game->w_id, 0, 0);
+	mlx_key_hook(game->id, ft_my_keys, game);
+	mlx_loop_hook(game->id, ft_raycast, game);
+	mlx_loop(game->id);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_map	*game;
@@ -40,13 +57,6 @@ int	main(int argc, char **argv)
 	if (!game)
 		return (EXIT_FAILURE);
 	if (args_check(argc, argv) || parsing(argv[1], game))
-		return (free_struct(game), EXIT_FAILURE);
-	//from here use ft_terminate to free
-	game->id = mlx_init(960, 600, "xoxo", true);
-	if (!game->id)
-		return (ft_mlxerror(game), EXIT_FAILURE);
-	printf("hello\n");
-	if (create_images(game, game->graphics))
 		return (free_struct(game), EXIT_FAILURE);
 	ft_initgame(game);
 	//mlx_close_window(game->id);
