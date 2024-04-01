@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 19:08:57 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:53:35 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,10 +138,16 @@ void		ft_put_pixel(mlx_image_t *image, int x, int y, uint32_t color);
 int			create_images(t_map *game, t_graphics *graphics);
 
 //game.c
-uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical);
 void		ft_raycast(void *param);
 void		move_camera(t_map *game, char dir);
 int			ft_wall_dist(t_map *game, t_vector tmp_pos);
 void		move_player(t_map *game, char dir);
 void		ft_my_keys(mlx_key_data_t keydata, void *param);
+
+//raycast_utils.c
+uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical);
+void		ft_set_raycast(t_raycast *r, t_map *game);
+void		ft_get_sidedist(t_raycast *r, t_map *game);
+void		ft_find_wall(t_raycast *r, t_map *game);
+void		ft_draw(t_raycast *r, t_map *game, int i);
 #endif

@@ -6,38 +6,17 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/04/01 19:09:01 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:52:19 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
-
-uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical)
-{
-	int			x;
-	int			y;
-	uint32_t	color;
-
-	color = 0;
-	if (horizontal >= 0)
-		x = (int)(95 * horizontal);
-	else
-		x = (int)(95 * (1.0 + horizontal));
-	y = (int)(95 * vertical);
-	color += image->pixels[(y * 96 + x) * 4] << 24;
-	color += image->pixels[(y * 96 + x) * 4 + 1] << 16;
-	color += image->pixels[(y * 96 + x) * 4 + 2] << 8;
-	color += image->pixels[(y * 96 + x) * 4 + 3];
-	return (color);
-}
 
 void	ft_raycast(void *param)
 {
 	double		i;
 	t_map		*game;
 	t_raycast	r;
-	uint32_t	hex_color;
-	int			j;
 
 	game = (t_map *) param;
 	i = -1.0;
@@ -45,60 +24,9 @@ void	ft_raycast(void *param)
 	while (++i < 960)
 	{
 		r.section = (2 * i / 959) - 1;
-		r.ray.x = game->player->dir.x + game->player->camera.x * r.section;
-		r.ray.y = game->player->dir.y + game->player->camera.y * r.section;
-		r.mapx = (int)game->player->pos.x;
-		r.mapy = (int)game->player->pos.y;
-		if (r.ray.x == 0)
-			r.d_dist.x = fabs(1 / 1e-30);
-		else
-			r.d_dist.x = fabs(1 / r.ray.x);
-		if (r.ray.y == 0)
-			r.d_dist.y = fabs(1 / 1e-30);
-		else
-			r.d_dist.y = fabs(1 / r.ray.y);
-		if (r.ray.x < 0)
-		{
-			r.stepx = -1;
-			r.s_dist.x = (game->player->pos.x - r.mapx) * r.d_dist.x;
-		}
-		else
-		{
-			r.stepx = 1;
-			r.s_dist.x = (r.mapx + 1.0 - game->player->pos.x) * r.d_dist.x;
-		}
-		if (r.ray.y < 0)
-		{
-			r.stepy = -1;
-			r.s_dist.y = (game->player->pos.y - r.mapy) * r.d_dist.y;
-		}
-		else
-		{
-			r.stepy = 1;
-			r.s_dist.y = (r.mapy + 1.0 - game->player->pos.y) * r.d_dist.y;
-		}
-		r.hit = 0;
-		while (!r.hit)
-		{
-			if (r.s_dist.x < r.s_dist.y)
-			{
-				r.s_dist.x += r.d_dist.x;
-				r.mapx += r.stepx;
-				r.side = 0;
-			}
-			else
-			{
-				r.s_dist.y += r.d_dist.y;
-				r.mapy += r.stepy;
-				r.side = 1;
-			}
-			if (game->matrix[r.mapy][r.mapx] == '1')
-				r.hit = 1;
-		}
-		if (r.side == 0)
-			r.walldist = (r.s_dist.x - r.d_dist.x);
-		else
-			r.walldist = (r.s_dist.y - r.d_dist.y);
+		ft_set_raycast(&r, game);
+		ft_get_sidedist(&r, game);
+		ft_find_wall(&r, game);
 		if (r.walldist <= 0.001)
 			r.lineheight = (int)(600 / 0.001);
 		else
@@ -109,31 +37,7 @@ void	ft_raycast(void *param)
 			r.drawstart = 0;
 		if (r.drawend >= 600)
 			r.drawend = 600 - 1;
-		j = r.drawstart;
-		while (j <= r.drawend)
-		{
-			if (r.side && (int) r.mapy < (int) game->player->pos.y)
-			{
-				hex_color = ft_get_pixel(game->graphics->img_wall_n, (r.ray.x * r.walldist + game->player->pos.x - ((int)(r.ray.x * r.walldist + game->player->pos.x))), ((double)(((r.lineheight - 600) / 2) + j)) / ((double)(r.lineheight)));
-				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
-			}
-			else if (r.side && (int) r.mapy > (int) game->player->pos.y)
-			{
-				hex_color = ft_get_pixel(game->graphics->img_wall_s, (r.ray.x * r.walldist + game->player->pos.x - ((int)(r.ray.x * r.walldist + game->player->pos.x))), ((double)(((r.lineheight - 600) / 2) + j)) / ((double)(r.lineheight)));
-				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
-			}
-			else if (!r.side && (int) r.mapx > (int) game->player->pos.x)
-			{
-				hex_color = ft_get_pixel(game->graphics->img_wall_e, (r.ray.y * r.walldist + game->player->pos.y - ((int)(r.ray.y * r.walldist + game->player->pos.y))), ((double)(((r.lineheight - 600) / 2) + j)) / ((double)(r.lineheight)));
-				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
-			}
-			else
-			{
-				hex_color = ft_get_pixel(game->graphics->img_wall_w, (r.ray.y * r.walldist + game->player->pos.y - ((int)(r.ray.y * r.walldist + game->player->pos.y))), ((double)(((r.lineheight - 600) / 2) + j)) / ((double)(r.lineheight)));
-				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
-			}
-			j++;
-		}
+		ft_draw(&r, game, (int) i);
 	}
 }
 
