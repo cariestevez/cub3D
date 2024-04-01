@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 17:41:22 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 17:46:23 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ void		ft_populate_player(t_map *game, int x, int y, char dir);
 //rendering.c
 void		render_floor_ceiling(t_map *game);
 int			create_images(t_map *game, t_graphics *graphics);
-void		putpixel(int x, int y, int color);
 void		ft_put_pixel(mlx_image_t *image, int x, int y, uint32_t color);
 
 //game.c
