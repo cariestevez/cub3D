@@ -6,7 +6,7 @@
 /*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/04/01 16:52:07 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:25:41 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,6 @@ void	ft_raycast(void *param)
 		}
 		while (!hit)
 		{
-				//We will find the next step based on which side is shorter, so we will add deltaDist. The next sqaure in that direction will be sideDist+deltaDist away
-				//After moving to the next border, we check if that border is a wall, to break the loop, or not. Since the room is surrounded by walls, we don't need to worry about going out of the map
 			if (sideDistX < sideDistY)
 			{
 				sideDistX += deltaDistX;
@@ -125,22 +123,19 @@ void	ft_raycast(void *param)
 				mapY += stepY;
 				side = 1;
 			}
-			//Check if ray has hit a wall
 			if (game->matrix[mapY][mapX] == '1')
 				hit = 1;
 		}
-		double WallDist; //How far is the wall based on the camera plane? No from player, as that would give us fisheye effect (round walls)
+		double WallDist;
 		if(side == 0)
 			WallDist = (sideDistX - deltaDistX);
 		else
 			WallDist = (sideDistY - deltaDistY);
-		//Now we calculate how big the wall should be, inversely proportional to WallDist, using the height of the screen so when we are in front of a wall, it takes up all the space
 		int lineHeight;
 		if (WallDist <= 0.001)
 			lineHeight = (int) (600 / 0.001);
 		else
 			lineHeight = (int)(600/ WallDist);
-		//calculate lowest and highest pixel to fill in current stripe: 0 is the center of the screen, so half the line should go negative and the other positive. If it's higher than the margins, stop at 0/highest margin
 		int drawStart = -lineHeight / 2 + 600 / 2;
 		if(drawStart < 0)
 			drawStart = 0;
@@ -148,27 +143,26 @@ void	ft_raycast(void *param)
 		if(drawEnd >= 600)
 			drawEnd = 600 - 1;
 		int	j = drawStart;
-		//printf("For i=%d, x component is %f hits the wall at %f\n", (int) i, ray.x * WallDist, (ray.x * WallDist - ((int) (ray.x * WallDist)))*100);
 		while (j <= drawEnd)
 		{
-			if (side && (int) mapY < (int) game->player->pos.y) //North
+			if (side && (int) mapY < (int) game->player->pos.y)
 			{
-				hex_color = ft_get_pixel(game->graphics->img_wall_N, (ray.x * WallDist + game->player->pos.x - ((int) (ray.x * WallDist + game->player->pos.x))), ((double)(((lineHeight - 600)/2) + j)) / ((double) (lineHeight)));
+				hex_color = ft_get_pixel(game->graphics->img_wall_N, (ray.x * WallDist + game->player->pos.x - ((int)(ray.x * WallDist + game->player->pos.x))), ((double)(((lineHeight - 600) / 2) + j)) / ((double)(lineHeight)));
 				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
 			}
-			else if (side && (int) mapY > (int) game->player->pos.y) //South
+			else if (side && (int) mapY > (int) game->player->pos.y)
 			{
-				hex_color = ft_get_pixel(game->graphics->img_wall_S, (ray.x * WallDist + game->player->pos.x - ((int) (ray.x * WallDist + game->player->pos.x))), ((double)(((lineHeight - 600)/2) + j)) / ((double) (lineHeight)));
+				hex_color = ft_get_pixel(game->graphics->img_wall_S, (ray.x * WallDist + game->player->pos.x - ((int)(ray.x * WallDist + game->player->pos.x))), ((double)(((lineHeight - 600) / 2) + j)) / ((double)(lineHeight)));
 				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
 			}
-			else if (!side && (int) mapX > (int) game->player->pos.x) //East
+			else if (!side && (int) mapX > (int) game->player->pos.x)
 			{
-				hex_color = ft_get_pixel(game->graphics->img_wall_E, (ray.y * WallDist + game->player->pos.y - ((int) (ray.y * WallDist + game->player->pos.y))), ((double)(((lineHeight - 600)/2) + j)) / ((double) (lineHeight)));
+				hex_color = ft_get_pixel(game->graphics->img_wall_E, (ray.y * WallDist + game->player->pos.y - ((int)(ray.y * WallDist + game->player->pos.y))), ((double)(((lineHeight - 600) / 2) + j)) / ((double)(lineHeight)));
 				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
 			}
-			else //West
+			else
 			{
-				hex_color = ft_get_pixel(game->graphics->img_wall_W, (ray.y * WallDist + game->player->pos.y - ((int) (ray.y * WallDist + game->player->pos.y))), ((double)(((lineHeight - 600)/2) + j)) / ((double) (lineHeight)));
+				hex_color = ft_get_pixel(game->graphics->img_wall_W, (ray.y * WallDist + game->player->pos.y - ((int)(ray.y * WallDist + game->player->pos.y))), ((double)(((lineHeight - 600) / 2) + j)) / ((double)(lineHeight)));
 				mlx_put_pixel(game->w_id, (int) i, j, hex_color);
 			}
 			j++;
@@ -179,20 +173,15 @@ void	ft_raycast(void *param)
 void	move_camera(t_map *game, char dir)
 {
 	double	angle;
-	//Angles are backward since "north" is negative. We want to calculate the angle between 0 and 2*PI radians
-	//Reminder:
-	//0 degrees = 360 degrees = 0 radians = 2*PI radians
-	//90 degrees = PI/2
-	//180 degrees = PI
-	//270 degrees = 3*PI/2
-	if (game->player->dir.y < 0 && game->player->dir.x >= 0)//If Y is positive but X negative, we are facing northwestish (0-90)
-		angle = acos(game->player->dir.x); //Angle between 0-90 degrees, so this is good
-	else if (game->player->dir.y >= 0 && game->player->dir.x >= 0)//We are facing southwestish (270-360)
-		angle = 2*PI - acos(game->player->dir.x);//acos gives us only the 0-180 degrees, so we need to adjust the angle
-	else if (game->player->dir.y >= 0 && game->player->dir.x < 0)//We are facing southeastish (180-270)
-		angle = 2*PI - acos(game->player->dir.x);//Again, we need to adjust the angle
-	else //We are facing norththeastish (90-180)
-		angle = acos(game->player->dir.x); //acos works again
+
+	if (game->player->dir.y < 0 && game->player->dir.x >= 0)
+		angle = acos(game->player->dir.x);
+	else if (game->player->dir.y >= 0 && game->player->dir.x >= 0)
+		angle = 2 * PI - acos(game->player->dir.x);
+	else if (game->player->dir.y >= 0 && game->player->dir.x < 0)
+		angle = 2 * PI - acos(game->player->dir.x);
+	else
+		angle = acos(game->player->dir.x);
 	if (dir == 'L')
 		angle += PI / 36;
 	else if (dir == 'R')

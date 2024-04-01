@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rendering.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:40:25 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 18:17:15 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:27:29 by hdorado-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	render_floor_ceiling(t_map *game)
 			x++;
 		}
 		y++;
-	}	
+	}
 }
 
 //This function will get the coordinates (x, y) in the image "image" that we want to paint with our color "color"
