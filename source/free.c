@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 23:28:43 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 19:02:37 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/02 21:38:13 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,23 @@ void	free_graphics(t_graphics *graphic)
 	graphic->path_wall_e = NULL;
 	free(graphic->path_wall_w);
 	graphic->path_wall_w = NULL;
-	free(graphic->txtr_wall_n);
+	mlx_delete_texture(graphic->txtr_wall_n);
 	graphic->txtr_wall_n = NULL;
-	free(graphic->txtr_wall_s);
+	mlx_delete_texture(graphic->txtr_wall_s);
 	graphic->txtr_wall_s = NULL;
-	free(graphic->txtr_wall_e);
+	mlx_delete_texture(graphic->txtr_wall_e);
 	graphic->txtr_wall_e = NULL;
-	free(graphic->txtr_wall_w);
+	mlx_delete_texture(graphic->txtr_wall_w);
 	graphic->txtr_wall_w = NULL;
 }
 
 void	free_struct(t_map *game)
 {
+	free(game->player);
+	game->player = NULL;
 	free_graphics(game->graphics);
+	free(game->graphics);
+	game->graphics = NULL;
 	free_array(game->matrix);
 	free(game);
 	game = NULL;

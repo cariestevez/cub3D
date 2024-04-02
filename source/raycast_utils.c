@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 19:52:08 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/04/01 19:52:15 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/02 22:19:06 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical)
+uint32_t	ft_get_pixel(mlx_image_t *image, double htal, double vcal)
 {
 	int			x;
 	int			y;
 	uint32_t	color;
 
 	color = 0;
-	if (horizontal >= 0)
-		x = (int)(95 * horizontal);
+	if (htal >= 0)
+		x = (int)(95 * htal);
 	else
-		x = (int)(95 * (1.0 + horizontal));
-	y = (int)(95 * vertical);
+		x = (int)(95 * (1.0 + htal));
+	y = (int)(95 * vcal);
 	color += image->pixels[(y * 96 + x) * 4] << 24;
 	color += image->pixels[(y * 96 + x) * 4 + 1] << 16;
 	color += image->pixels[(y * 96 + x) * 4 + 2] << 8;
