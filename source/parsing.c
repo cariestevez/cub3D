@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:43:35 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 19:05:12 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/02 22:14:11 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,25 @@ int	parse_rgb(t_map *game, char **token)
 	return (0);
 }
 
+int	save_textures(char **token, t_map *game)
+{
+	if (token && !token[0])
+		return (0);
+	if (token[2])
+		return (printf("Error\nToo many words in line\n"), 1);
+	if (!game->graphics->path_wall_n && ft_strncmp(token[0], "NO", 3) == 0)
+		game->graphics->path_wall_n = ft_strdup(token[1]);
+	else if (!game->graphics->path_wall_s && ft_strncmp(token[0], "SO", 3) == 0)
+		game->graphics->path_wall_s = ft_strdup(token[1]);
+	else if (!game->graphics->path_wall_e && ft_strncmp(token[0], "EA", 3) == 0)
+		game->graphics->path_wall_e = ft_strdup(token[1]);
+	else if (!game->graphics->path_wall_w && ft_strncmp(token[0], "WE", 3) == 0)
+		game->graphics->path_wall_w = ft_strdup(token[1]);
+	else if (parse_rgb(game, token))
+		return (free_array(token), 1);
+	return (free_array(token), 0);
+}
+
 int	parse_textures(int fd, t_map *game, char **line)
 {
 	char	**token;
@@ -39,7 +58,7 @@ int	parse_textures(int fd, t_map *game, char **line)
 			|| !game->graphics->path_wall_s || !game->graphics->path_wall_e
 			|| !game->graphics->path_wall_w))
 	{
-		*line = ft_strtrim(*line, "\n");
+		*line = trim_nl(line);
 		if (ft_strlen(*line) == 0)
 		{
 			ft_read(line, fd);
@@ -55,30 +74,18 @@ int	parse_textures(int fd, t_map *game, char **line)
 	return (0);
 }
 
-int	save_map_line(char *line, t_map *game)
+int	inspect_map(t_map *game, int i, int j, int *n_player)
 {
-	int		i;
-	char	**new_matrix;
-
-	i = 0;
-	new_matrix = NULL;
-	printf("in save_map_line with line: %s\n", line);
-	while (game->matrix && game->matrix[i])
-		i++;
-	new_matrix = (char **)ft_calloc(sizeof(char *), i + 2);
-	if (!new_matrix)
-		return (1);
-	i = 0;
-	while (game->matrix && game->matrix[i])
+	if (game->matrix[i][j] == 'N' || game->matrix[i][j] == 'S'
+		|| game->matrix[i][j] == 'E' || game->matrix[i][j] == 'W')
 	{
-		new_matrix[i] = ft_strdup(game->matrix[i]);
-		free(game->matrix[i]);
-		game->matrix[i] = NULL;
-		i++;
+		ft_populate_player(game, i, j, game->matrix[i][j]);
+		game->matrix[i][j] = '0';
+		(*n_player)++;
 	}
-	free(game->matrix);
-	new_matrix[i] = ft_strdup(line);
-	game->matrix = new_matrix;
+	else if (!(game->matrix[i][j] == '1' || game->matrix[i][j] == '0'
+		|| game->matrix[i][j] == ' '))
+		return (printf("Error\nInvalid char when map expected\n"), 1);
 	return (0);
 }
 
@@ -86,7 +93,7 @@ int	parse_map(int fd, t_map *game, char **line)
 {
 	while (ft_strlen(*line))
 	{
-		*line = ft_strtrim(*line, "\n");
+		*line = trim_nl(line);
 		if (game->matrix == NULL && is_empty_line(*line))
 		{
 			free(*line);
@@ -104,18 +111,4 @@ int	parse_map(int fd, t_map *game, char **line)
 		*line = get_next_line(fd);
 	}
 	return (validate_map(game));
-}
-
-int	parsing(char *map_file, t_map *game)
-{
-	int		fd;
-	char	*line;
-
-	line = NULL;
-	fd = open(map_file, O_RDONLY);
-	if (fd < 0)
-		return (printf("Error\nUnable to open the map file\n"), 1);
-	if (parse_textures(fd, game, &line) || parse_map(fd, game, &line))
-		return (close(fd), 1);
-	return (close(fd), 0);
 }

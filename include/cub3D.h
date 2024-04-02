@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 19:53:35 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/02 22:18:29 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CUB3D_H
 
 # include "../libft/libft.h"
-# include "MLX42/MLX42.h"
+# include "../MLX42/include/MLX42/MLX42.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -98,6 +98,7 @@ typedef struct s_raycast
 //main.c
 void		ft_terminate(t_map *game);
 int			ft_initgame(t_map *game);
+int			parsing(char *map_file, t_map *game);
 int			args_check(int argc, char **argv);
 
 //init.c
@@ -113,24 +114,24 @@ void		ft_mlxerror(t_map *game);
 
 //parsing.c
 int			parse_rgb(t_map *game, char **token);
+int			save_textures(char **token, t_map *game);
 int			parse_textures(int fd, t_map *game, char **line);
-int			save_map_line(char *line, t_map *game);
+int			inspect_map(t_map *game, int i, int j, int *n_player);
 int			parse_map(int fd, t_map *game, char **line);
-int			parsing(char *map_file, t_map *game);
 
 //validation_checks.c
 int			is_closed(t_map *game);
+void		ft_populate_player(t_map *game, int x, int y, char dir);
 int			validate_map(t_map *game);
-int			save_textures(char **token, t_map *game);
 int			save_rgb(char **rgb_char, char c, t_map *game);
 int			validate_rgb(char c, char *raw_rgb, t_map *game);
 
 //utils.c
+char		*trim_nl(char **line);
 void		ft_read(char **line, int fd);
 int			is_empty_line(char *line);
 t_vector	ft_fill_vector(double x, double y);
-void		ft_populate_player(t_map *game, int x, int y, char dir);
-int			inspect_map(t_map *game, int i, int j, int *n_player);
+int			save_map_line(char *line, t_map *game);
 
 //rendering.c
 void		render_floor_ceiling(t_map *game);
@@ -145,9 +146,10 @@ void		move_player(t_map *game, char dir);
 void		ft_my_keys(mlx_key_data_t keydata, void *param);
 
 //raycast_utils.c
-uint32_t	ft_get_pixel(mlx_image_t *image, double horizontal, double vertical);
+uint32_t	ft_get_pixel(mlx_image_t *image, double htal, double vcal);
 void		ft_set_raycast(t_raycast *r, t_map *game);
 void		ft_get_sidedist(t_raycast *r, t_map *game);
 void		ft_find_wall(t_raycast *r, t_map *game);
 void		ft_draw(t_raycast *r, t_map *game, int i);
+
 #endif

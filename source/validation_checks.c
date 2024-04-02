@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validation_checks.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 19:03:39 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/02 22:16:01 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,32 @@ int	is_closed(t_map *game)
 	return (0);
 }
 
+void	ft_populate_player(t_map *game, int x, int y, char dir)
+{
+	game->player = ft_calloc(sizeof(t_player), 1);
+	game->player->pos = ft_fill_vector(y + 0.5, x + 0.5);
+	if (dir == 'N')
+	{
+		game->player->dir = ft_fill_vector(0, -1);
+		game->player->camera = ft_fill_vector(0.66, 0);
+	}
+	else if (dir == 'S')
+	{
+		game->player->dir = ft_fill_vector(0, 1);
+		game->player->camera = ft_fill_vector(-0.66, 0);
+	}
+	else if (dir == 'W')
+	{
+		game->player->dir = ft_fill_vector(-1, 0);
+		game->player->camera = ft_fill_vector(0, -0.66);
+	}
+	else if (dir == 'E')
+	{
+		game->player->dir = ft_fill_vector(1, 0);
+		game->player->camera = ft_fill_vector(0, 0.66);
+	}
+}
+
 int	validate_map(t_map *game)
 {
 	int	i;
@@ -64,25 +90,6 @@ int	validate_map(t_map *game)
 	if (is_closed(game))
 		return (printf("Error\nMap not enclosed in walls\n"), 1);
 	return (0);
-}
-
-int	save_textures(char **token, t_map *game)
-{
-	if (token && !token[0])
-		return (0);
-	if (token[2])
-		return (printf("Error\nToo many words in line\n"), 1);
-	if (!game->graphics->path_wall_n && ft_strncmp(token[0], "NO", 3) == 0)
-		game->graphics->path_wall_n = ft_strdup(token[1]);
-	else if (!game->graphics->path_wall_s && ft_strncmp(token[0], "SO", 3) == 0)
-		game->graphics->path_wall_s = ft_strdup(token[1]);
-	else if (!game->graphics->path_wall_e && ft_strncmp(token[0], "EA", 3) == 0)
-		game->graphics->path_wall_e = ft_strdup(token[1]);
-	else if (!game->graphics->path_wall_w && ft_strncmp(token[0], "WE", 3) == 0)
-		game->graphics->path_wall_w = ft_strdup(token[1]);
-	else if (parse_rgb(game, token))
-		return (free_array(token), 1);
-	return (free_array(token), 0);
 }
 
 int	save_rgb(char **rgb_char, char c, t_map *game)
