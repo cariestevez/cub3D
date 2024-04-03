@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 19:52:08 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/04/02 22:19:06 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:57:36 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	ft_draw(t_raycast *r, t_map *game, int i)
 			hex = ft_get_pixel(game->graphics->img_wall_e, (ph - (int) ph), p);
 		else
 			hex = ft_get_pixel(game->graphics->img_wall_w, (ph - (int) ph), p);
-		mlx_put_pixel(game->w_id, i, j, hex);
+		ft_put_pixel(game->w_id, i, j, hex);
 		j++;
 	}
 }

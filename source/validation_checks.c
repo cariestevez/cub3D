@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validation_checks.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/02 22:16:01 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:47:39 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,30 @@ int	is_closed(t_map *game)
 
 void	ft_populate_player(t_map *game, int x, int y, char dir)
 {
-	game->player = ft_calloc(sizeof(t_player), 1);
-	game->player->pos = ft_fill_vector(y + 0.5, x + 0.5);
-	if (dir == 'N')
-	{
-		game->player->dir = ft_fill_vector(0, -1);
-		game->player->camera = ft_fill_vector(0.66, 0);
-	}
-	else if (dir == 'S')
-	{
-		game->player->dir = ft_fill_vector(0, 1);
-		game->player->camera = ft_fill_vector(-0.66, 0);
-	}
-	else if (dir == 'W')
-	{
-		game->player->dir = ft_fill_vector(-1, 0);
-		game->player->camera = ft_fill_vector(0, -0.66);
-	}
-	else if (dir == 'E')
-	{
-		game->player->dir = ft_fill_vector(1, 0);
-		game->player->camera = ft_fill_vector(0, 0.66);
+	if (!game->player)
+	{		
+		game->player = ft_calloc(sizeof(t_player), 1);
+		game->player->pos = ft_fill_vector(y + 0.5, x + 0.5);
+		if (dir == 'N')
+		{
+			game->player->dir = ft_fill_vector(0, -1);
+			game->player->camera = ft_fill_vector(0.66, 0);
+		}
+		else if (dir == 'S')
+		{
+			game->player->dir = ft_fill_vector(0, 1);
+			game->player->camera = ft_fill_vector(-0.66, 0);
+		}
+		else if (dir == 'W')
+		{
+			game->player->dir = ft_fill_vector(-1, 0);
+			game->player->camera = ft_fill_vector(0, -0.66);
+		}
+		else if (dir == 'E')
+		{
+			game->player->dir = ft_fill_vector(1, 0);
+			game->player->camera = ft_fill_vector(0, 0.66);
+		}
 	}
 }
 
