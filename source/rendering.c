@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:40:25 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/01 19:00:51 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:41:18 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,54 @@ void	render_floor_ceiling(t_map *game)
 	}
 }
 
-void	ft_put_pixel(mlx_image_t *image, int x, int y, uint32_t color)
+void	ft_put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
 {
 	int	bpp;
 
 	bpp = sizeof(int32_t);
-	image->pixels[(y * WIN_WIDTH + x) * bpp + 0] = (uint8_t)(color >> 24);
-	image->pixels[(y * WIN_WIDTH + x) * bpp + 1] = (uint8_t)(color >> 16);
-	image->pixels[(y * WIN_WIDTH + x) * bpp + 2] = (uint8_t)(color >> 8);
-	image->pixels[(y * WIN_WIDTH + x) * bpp + 3] = (uint8_t)(150);
+	img->pixels[(y * (WIN_WIDTH + 20) + x) * bpp + 0] = (uint8_t)(color >> 24);
+	img->pixels[(y * (WIN_WIDTH + 20) + x) * bpp + 1] = (uint8_t)(color >> 16);
+	img->pixels[(y * (WIN_WIDTH + 20) + x) * bpp + 2] = (uint8_t)(color >> 8);
+	img->pixels[(y * (WIN_WIDTH + 20) + x) * bpp + 3] = (uint8_t)(150);
+}
+
+void	delete_textures(t_graphics *graphic)
+{
+	if (graphic->txtr_wall_n)
+		mlx_delete_texture(graphic->txtr_wall_n);
+	graphic->txtr_wall_n = NULL;
+	if (graphic->txtr_wall_s)
+		mlx_delete_texture(graphic->txtr_wall_s);
+	graphic->txtr_wall_s = NULL;
+	if (graphic->txtr_wall_e)
+		mlx_delete_texture(graphic->txtr_wall_e);
+	graphic->txtr_wall_e = NULL;
+	if (graphic->txtr_wall_w)
+		mlx_delete_texture(graphic->txtr_wall_w);
+	graphic->txtr_wall_w = NULL;
+}
+
+int	texture_exists(t_graphics *graphic)
+{
+	int	fd;
+
+	fd = open(graphic->path_wall_n, O_RDONLY);
+	if (fd < 0)
+		return (1);
+	close(fd);
+	fd = open(graphic->path_wall_s, O_RDONLY);
+	if (fd < 0)
+		return (1);
+	close(fd);
+	fd = open(graphic->path_wall_e, O_RDONLY);
+	if (fd < 0)
+		return (1);
+	close(fd);
+	fd = open(graphic->path_wall_w, O_RDONLY);
+	if (fd < 0)
+		return (1);
+	close(fd);
+	return (0);
 }
 
 int	create_images(t_map *game, t_graphics *graphic)

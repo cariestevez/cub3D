@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/03 15:27:11 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:43:25 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ t_vector	ft_fill_vector(double x, double y);
 int			save_map_line(char *line, t_map *game);
 
 //rendering.c
+int			texture_exists(t_graphics *graphic);
+void		delete_textures(t_graphics *graphic);
 void		render_floor_ceiling(t_map *game);
 void		ft_put_pixel(mlx_image_t *image, int x, int y, uint32_t color);
 int			create_images(t_map *game, t_graphics *graphics);

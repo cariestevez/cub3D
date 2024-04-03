@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdorado- <hdorado-@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 14:49:09 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/04/01 19:52:19 by hdorado-         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:56:53 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,10 @@ void	ft_my_keys(mlx_key_data_t keydata, void *param)
 
 	game = (t_map *)param;
 	if (keydata.key == MLX_KEY_ESCAPE)
+	{
 		mlx_close_window(game->id);
+		return ;
+	}
 	else if (keydata.key == MLX_KEY_LEFT)
 		move_camera(game, 'L');
 	else if (keydata.key == MLX_KEY_RIGHT)

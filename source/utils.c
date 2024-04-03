@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:42:28 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/02 22:11:35 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:00:20 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	save_map_line(char *line, t_map *game)
 
 	i = 0;
 	new_matrix = NULL;
-	printf("in save_map_line with line: %s\n", line);
 	while (game->matrix && game->matrix[i])
 		i++;
 	new_matrix = (char **)ft_calloc(sizeof(char *), i + 2);

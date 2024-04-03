@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cestevez <cestevez@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 23:28:43 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/02 21:38:13 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:27:01 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,7 @@ void	free_graphics(t_graphics *graphic)
 	graphic->path_wall_e = NULL;
 	free(graphic->path_wall_w);
 	graphic->path_wall_w = NULL;
-	mlx_delete_texture(graphic->txtr_wall_n);
-	graphic->txtr_wall_n = NULL;
-	mlx_delete_texture(graphic->txtr_wall_s);
-	graphic->txtr_wall_s = NULL;
-	mlx_delete_texture(graphic->txtr_wall_e);
-	graphic->txtr_wall_e = NULL;
-	mlx_delete_texture(graphic->txtr_wall_w);
-	graphic->txtr_wall_w = NULL;
+	delete_textures(graphic);
 }
 
 void	free_struct(t_map *game)
