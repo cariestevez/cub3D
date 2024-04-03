@@ -3,9 +3,8 @@ CFLAGS		:= -g -Wextra -Wall -Werror -Wunreachable-code -Ofast
 LIBMLX		:= ./MLX42
 LIBFT		:= ./libft
 
-HEADERS	:= -I./include -I$(LIBMLX)/include -I$(LIBFT)
+HEADERS	:= -I ./include -I $(LIBMLX)/include -I $(LIBFT)
 #LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -L/opt/homebrew/lib -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
-#LIBS	:= -L$(LIBFT) -lft $(LIBMLX)/build/libmlx42.a -ldl -lglfw -L"/opt/homebrew/Cellar/glfw/3.4/lib/" -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
 LIBS	:= -L$(LIBFT) -L$(LIBMLX)/build -lft -ldl -lglfw -pthread -lm -lmlx42
 
 SRCS	:=	source/main.c \
@@ -17,6 +16,15 @@ SRCS	:=	source/main.c \
 			source/game.c \
 			source/rendering.c \
 			source/raycast_utils.c \
+			#src/init_and_copy.c	\
+			src/pre_parsing.c	\
+			src/parsing.c	\
+			src/validate_map.c	\
+			src/validation_checks.c	\
+			src/rendering.c	\
+			src/key_handling.c	\
+			src/free_exit.c	\
+			src/terminate_exit.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: $(NAME)
@@ -48,6 +56,6 @@ fclean: clean
 	@rm -rf $(NAME)
 	@$(MAKE) -C $(LIBFT) fclean
 
-re: fclean all
+re: clean all
 
 .PHONY: all libft libmlx clean fclean re
