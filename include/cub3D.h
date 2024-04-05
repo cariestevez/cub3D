@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:03 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/03 18:43:25 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/05 12:26:25 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void		move_player(t_map *game, char dir);
 void		ft_my_keys(mlx_key_data_t keydata, void *param);
 
 //raycast_utils.c
-uint32_t	ft_get_pixel(mlx_image_t *image, double htal, double vcal);
+uint32_t	t_get_pxl(mlx_image_t *image, double htal, double vcal);
 void		ft_set_raycast(t_raycast *r, t_map *game);
 void		ft_get_sidedist(t_raycast *r, t_map *game);
 void		ft_find_wall(t_raycast *r, t_map *game);

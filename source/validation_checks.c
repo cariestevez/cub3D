@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 22:46:17 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/03 18:47:39 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/05 12:27:14 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	is_closed(t_map *game)
 void	ft_populate_player(t_map *game, int x, int y, char dir)
 {
 	if (!game->player)
-	{		
+	{
 		game->player = ft_calloc(sizeof(t_player), 1);
 		game->player->pos = ft_fill_vector(y + 0.5, x + 0.5);
 		if (dir == 'N')

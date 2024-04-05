@@ -6,7 +6,7 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 17:26:15 by cestevez          #+#    #+#             */
-/*   Updated: 2024/04/03 18:49:55 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/05 12:34:41 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ int	args_check(int argc, char **argv)
 	len = 0;
 	if (argc != 2)
 	{
-		ft_printf("Error\nUsage: %s <map_file.cub>\n", argv[0]);
+		printf("Error\nUsage: %s <map_file.cub>\n", argv[0]);
 		return (EXIT_FAILURE);
 	}
 	len = strlen(argv[1]);
 	if (len < 4 || strcmp(argv[1] + len - 4, ".cub") != 0)
 	{
-		ft_printf("Error\nFile must have .cub extension.\n");
+		printf("Error\nFile must have .cub extension.\n");
 		return (EXIT_FAILURE);
 	}
 	return (0);
