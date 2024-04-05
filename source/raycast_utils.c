@@ -6,13 +6,13 @@
 /*   By: cestevez <cestevez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 19:52:08 by hdorado-          #+#    #+#             */
-/*   Updated: 2024/04/03 19:37:12 by cestevez         ###   ########.fr       */
+/*   Updated: 2024/04/05 12:25:54 by cestevez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
-uint32_t	ft_get_pixel(mlx_image_t *image, double htal, double vcal)
+uint32_t	t_get_pxl(mlx_image_t *image, double htal, double vcal)
 {
 	int			x;
 	int			y;
@@ -112,13 +112,13 @@ void	ft_draw(t_raycast *r, t_map *game, int i)
 	{
 		p = ((double)(((r->lineheight - 600) / 2) + j)) / (r->lineheight);
 		if (r->side && (int) r->mapy < (int) game->player->pos.y)
-			hex = ft_get_pixel(game->graphics->img_wall_n, (pv - (int) pv), p);
+			hex = t_get_pxl(game->graphics->img_wall_n, (pv - (int)pv), p);
 		else if (r->side && (int) r->mapy > (int) game->player->pos.y)
-			hex = ft_get_pixel(game->graphics->img_wall_s, (1 - pv + (int) pv), p);
+			hex = t_get_pxl(game->graphics->img_wall_s, (1 - pv + (int)pv), p);
 		else if (!r->side && (int) r->mapx > (int) game->player->pos.x)
-			hex = ft_get_pixel(game->graphics->img_wall_e, (ph - (int) ph), p);
+			hex = t_get_pxl(game->graphics->img_wall_e, (ph - (int)ph), p);
 		else
-			hex = ft_get_pixel(game->graphics->img_wall_w, (1 - ph + (int) ph), p);
+			hex = t_get_pxl(game->graphics->img_wall_w, (1 - ph + (int)ph), p);
 		ft_put_pixel(game->w_id, i, j, hex);
 		j++;
 	}
