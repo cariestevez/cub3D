@@ -19,5 +19,5 @@ This project aims to make you dive into low-level programming, game development 
 
 ## Usage:
 * Compile the code using the `make` command
-* Run `./cub3d`
-* Enjoy the views!
+* Run `./cub3d` `maps/complex.cub` or choose between any of the other maps in the `./maps` folder
+* Enjoy the views! And if you want a personalized experience, feel free to design your own maze and even change the textures of the walls!!
